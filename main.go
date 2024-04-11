@@ -1,5 +1,8 @@
 package main
 
+import "fmt"
+
 func main() {
-	breadthFirstScrapper("https://id.wikipedia.org/wiki/Indonesia", "Jawa")
+	bruh, _ := breadthFirstScrapper("Car", "Motorcycle")
+	fmt.Println(bruh)
 }
