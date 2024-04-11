@@ -78,10 +78,15 @@ func breadthFirstScrapper(url string, word string) {
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
 
-		if !strings.Contains(link, "wikipedia.org") {
+		if !strings.HasPrefix(link, "http") {
+			link = "https://id.wikipedia.org" + link
+		}
+
+		if !strings.Contains(link, "wikipedia.org") || !strings.Contains(link, "/wiki/") {
 			return
 		}
-		if !strings.Contains(link, "/wiki") {
+
+		if strings.Contains(link, "Templat") {
 			return
 		}
 
