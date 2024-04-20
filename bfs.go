@@ -26,6 +26,7 @@ func breadthFirstScrapper(firstWord string, word string) ([]Page, error) {
 		visited = make(map[string]bool)
 		path    []Page
 		mutex   sync.Mutex
+		wg      sync.WaitGroup
 	)
 
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
@@ -55,12 +56,26 @@ func breadthFirstScrapper(firstWord string, word string) ([]Page, error) {
 			return
 		}
 
-		normalizedLink := NormalizeURL(link)
-		if visited[normalizedLink] {
+		if !strings.Contains(link, "en.wikipedia.org") {
 			return
 		}
+
+		normalizedLink := NormalizeURL(link)
 		mutex.Lock()
-		defer mutex.Unlock()
+		if !visited[normalizedLink] {
+			visited[normalizedLink] = true
+			if strings.EqualFold(e.Text, word) && getTitleFromURL(link) == word {
+				fmt.Println("Found the specified word:", link)
+				fmt.Println("Title: ", e.Text)
+				fmt.Println("Depth: ", e.Request.Depth)
+				isFound = true
+				mutex.Unlock()
+				wg.Done()
+				return
+			}
+			queue = append(queue, Page{URL: link, Title: getTitleFromURL(link), Depth: e.Request.Depth})
+		}
+		mutex.Unlock()
 		visited[normalizedLink] = true
 
 		if strings.EqualFold(e.Text, word) && getTitleFromURL(link) == word {
@@ -93,11 +108,13 @@ func breadthFirstScrapper(firstWord string, word string) ([]Page, error) {
 		fmt.Println("Title: ", currPage.Title)
 		fmt.Println("Depth: ", currPage.Depth)
 
-		c.Visit(currPage.URL)
-		if isFound && strings.EqualFold(currPage.Title, word) {
-			path = append(path, currPage)
-			break
-		}
+		wg.Add(1)
+		go func(curr Page) {
+			defer wg.Done()
+			c.Visit(curr.URL)
+		}(currPage)
+
+		wg.Wait()
 
 	}
 	return path, nil
