@@ -36,16 +36,21 @@ import (
 	"strings"
 
 	"github.com/gocolly/colly/v2"
+	orderedmap "github.com/wk8/go-ordered-map"
 )
 
-func crawler() {
-	queue := make(map[string]bool)
+func crawler(start string, target string) {
+	queue := orderedmap.New()
+	var currPath []string
+	continueSearch := true
 	c := colly.NewCollector(
-		colly.AllowedDomains("en.wikipedia.org"),
-		colly.Async(true))
-	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 2})
+		colly.AllowedDomains("en.wikipedia.org"))
 	c.OnHTML("a[href]", func(h *colly.HTMLElement) {
 		link := h.Attr("href")
+		if link == "/wiki/"+target {
+			continueSearch = false
+		}
+		_, exists := queue.Get(h.Request.AbsoluteURL(link))
 		if strings.HasPrefix(link, "/wiki/") &&
 			!strings.Contains(link, "File:") &&
 			!strings.Contains(link, "Help:") &&
@@ -58,18 +63,47 @@ func crawler() {
 			!strings.Contains(link, "MediaWiki:") &&
 			!strings.Contains(link, "User:") &&
 			!strings.Contains(link, "_talk:") &&
-			("/wiki/Main_Page" != link) &&
-			!queue["https://en.wikipedia.org"+link] {
-			queue["https://en.wikipedia.org"+link] = true
-			fmt.Println("https://en.wikipedia.org" + link)
+			(link != "/wiki/Main_Page") &&
+			!exists {
+			queue.Set(h.Request.AbsoluteURL(link), true)
+			fmt.Println(h.Request.AbsoluteURL(link))
 		}
-		h.Request.Visit(link)
 	})
-	queue["https://en.wikipedia.org/wiki/Gibran_Rakabuming"] = true
-	c.Visit("https://en.wikipedia.org/wiki/Gibran_Rakabuming")
+
+	c.OnRequest(func(r *colly.Request) {
+		fmt.Println("Visiting", r.URL)
+	})
+
+	c.OnError(func(_ *colly.Response, err error) {
+		fmt.Println("Something went wrong:", err)
+	})
+
+	c.OnResponse(func(r *colly.Response) {
+		// fmt.Println("Visited", r.Request.URL)
+	})
+
+	c.OnScraped(func(r *colly.Response) {
+		fmt.Println("Finished", r.Request.URL)
+		queue.Delete(r.Request.URL.String())
+		var link string
+		link = ""
+		for key := queue.Oldest(); key != nil; key = key.Next() {
+			link = key.Key.(string)
+			break
+		}
+		currPath = currPath[:len(currPath)-1]
+		if continueSearch {
+			currPath = append(currPath, link)
+			c.Visit(link)
+		}
+	})
+
+	currPath = append(currPath, "https://en.wikipedia.org/wiki/"+start)
+	c.Visit("https://en.wikipedia.org/wiki/" + start)
 	c.Wait()
+	fmt.Println(currPath)
 }
 
 func main() {
-	crawler()
+	crawler("Jokowi", "Indonesia")
 }
