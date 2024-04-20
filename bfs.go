@@ -41,6 +41,9 @@ func breadthFirstScrapper(firstWord string, word string) ([]Page, error) {
 
 		if !strings.Contains(link, "wikipedia.org") ||
 			!strings.Contains(link, "/wiki/") ||
+			strings.Contains(link, "#Naming_forms") ||
+			strings.Contains(link, "Surname") ||
+			strings.Contains(link, "Given_name") ||
 			strings.Contains(link, "Template") ||
 			strings.Contains(link, "Special:") ||
 			strings.Contains(link, "Wikipedia:") ||
@@ -63,6 +66,7 @@ func breadthFirstScrapper(firstWord string, word string) ([]Page, error) {
 		if strings.EqualFold(e.Text, word) && getTitleFromURL(link) == word {
 			fmt.Println("Found the specified word:", link)
 			fmt.Println("Title: ", e.Text)
+			fmt.Println("Depth: ", e.Request.Depth)
 			isFound = true
 			return
 		}
@@ -90,7 +94,6 @@ func breadthFirstScrapper(firstWord string, word string) ([]Page, error) {
 		fmt.Println("Depth: ", currPage.Depth)
 
 		c.Visit(currPage.URL)
-		fmt.Println(queue)
 		if isFound && strings.EqualFold(currPage.Title, word) {
 			path = append(path, currPage)
 			break
