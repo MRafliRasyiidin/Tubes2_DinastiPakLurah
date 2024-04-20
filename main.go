@@ -3,6 +3,6 @@ package main
 import "fmt"
 
 func main() {
-	bruh, _ := breadthFirstScrapper("Jokowi", "Jakarta")
+	bruh, _ := breadthFirstScrapper("Joko Widodo", "Solo")
 	fmt.Println(bruh)
 }

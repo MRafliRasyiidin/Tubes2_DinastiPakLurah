@@ -12,11 +12,13 @@ import (
 type Page struct {
 	URL   string
 	Title string
+	Depth int
 }
 
 func breadthFirstScrapper(firstWord string, word string) ([]Page, error) {
-	url := "https://en.wikipedia.org/wiki/" + firstWord
-	c := colly.NewCollector()
+
+	url := "https://en.wikipedia.org/wiki/" + strings.ReplaceAll(firstWord, " ", "_")
+	c := colly.NewCollector(colly.AllowedDomains("en.wikipedia.org"))
 
 	var (
 		isFound bool
@@ -37,8 +39,16 @@ func breadthFirstScrapper(firstWord string, word string) ([]Page, error) {
 			return
 		}
 
-		if !strings.Contains(link, "wikipedia.org") || !strings.Contains(link, "/wiki/") || strings.Contains(link, "Template") || strings.Contains(link, "Kategori:") ||
-			strings.Contains(link, "Special:") || strings.Contains(link, "Wikipedia:") || strings.Contains(link, "Help:") || strings.Contains(link, "File:") {
+		if !strings.Contains(link, "wikipedia.org") ||
+			!strings.Contains(link, "/wiki/") ||
+			strings.Contains(link, "Template") ||
+			strings.Contains(link, "Special:") ||
+			strings.Contains(link, "Wikipedia:") ||
+			strings.Contains(link, "Help:") ||
+			strings.Contains(link, "Portal:") ||
+			strings.Contains(link, "Main_Page") ||
+			strings.Contains(link, "Talk:") ||
+			strings.Contains(link, "File:") {
 			return
 		}
 
@@ -58,8 +68,7 @@ func breadthFirstScrapper(firstWord string, word string) ([]Page, error) {
 		}
 
 		if strings.Contains(link, "https://en.wikipedia.org") {
-			visited[link] = true
-			queue = append(queue, Page{URL: link, Title: getTitleFromURL(link)})
+			queue = append(queue, Page{URL: link, Title: getTitleFromURL(link), Depth: e.Request.Depth})
 		}
 	})
 
@@ -68,23 +77,26 @@ func breadthFirstScrapper(firstWord string, word string) ([]Page, error) {
 	})
 
 	if strings.Contains(url, "https://en.wikipedia.org") {
-		queue = append(queue, Page{URL: url, Title: getTitleFromURL(url)})
+		queue = append(queue, Page{URL: url, Title: getTitleFromURL(url), Depth: 0})
+		visited[NormalizeURL(url)] = true
 	}
 
 	for len(queue) > 0 && !isFound {
 		currPage := queue[0]
 		queue = queue[1:]
 
-		fmt.Println("Visiting:", currPage.URL)
+		fmt.Println("Visiting: ", currPage.URL)
 		fmt.Println("Title: ", currPage.Title)
-		c.Visit(currPage.URL)
+		fmt.Println("Depth: ", currPage.Depth)
 
+		c.Visit(currPage.URL)
+		fmt.Println(queue)
 		if isFound && strings.EqualFold(currPage.Title, word) {
 			path = append(path, currPage)
 			break
 		}
-	}
 
+	}
 	return path, nil
 }
 
