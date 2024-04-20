@@ -16,6 +16,7 @@ func bfsScrapper(url string, word string) {
 	)
 
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
+		
 		link := e.Attr("href")
 
 		if !strings.HasPrefix(link, "http") {

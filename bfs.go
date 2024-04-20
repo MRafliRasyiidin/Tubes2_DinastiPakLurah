@@ -50,9 +50,9 @@ func breadthFirstScrapper(firstWord string, word string) ([]Page, error) {
 		defer mutex.Unlock()
 		visited[normalizedLink] = true
 
-		// fmt.Println("Link found:", link)
-		if strings.Contains(e.Text, word) {
-			fmt.Println("Found the specified word at:", link)
+		if strings.EqualFold(e.Text, word) && getTitleFromURL(link) == word {
+			fmt.Println("Found the specified word:", link)
+			fmt.Println("Title: ", e.Text)
 			isFound = true
 			return
 		}
@@ -79,7 +79,7 @@ func breadthFirstScrapper(firstWord string, word string) ([]Page, error) {
 		fmt.Println("Title: ", currPage.Title)
 		c.Visit(currPage.URL)
 
-		if isFound {
+		if isFound && strings.EqualFold(currPage.Title, word) {
 			path = append(path, currPage)
 			break
 		}
