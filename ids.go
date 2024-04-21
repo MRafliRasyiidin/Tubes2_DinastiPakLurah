@@ -41,9 +41,9 @@ func ids(start string, target string, maxDepth, depth int) {
 					(link != "/wiki/Main_Page") && extractTitle(link) != start && !isInPath("https://en.wikipedia.org" + link, visited){
 					p = append(p, "https://en.wikipedia.org" + link)
 					fmt.Printf("%s - depth: %d\n", "https://en.wikipedia.org" + link, depth)
-					visited = append(visited, "https://en.wikipedia.org" + link)
 					if depth != 1 {
 						depth -= 1
+						visited = append(visited, "https://en.wikipedia.org" + link)
 						c.Visit("https://en.wikipedia.org" + link)
 					}
 				}
@@ -81,7 +81,7 @@ var visited []string
 
 func main() {
 	for i := 1; i < 10; i++ {
-		ids("Ring of Fire", "Madagascar", i, i) 
+		ids("Ring of Fire", "Car", i, i) 
 		p = p[:0]
 		visited = visited[:0]
 		//fmt.Println("ini i", i)
