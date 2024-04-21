@@ -13,10 +13,10 @@ func crawler(start string, target string, maxDepth int) {
 	for i := 1; i <= maxDepth; i++ {
 		visited[i] = make(map[string]bool)
 	}
-	dfs(start, target, maxDepth, 1, []string{}, visited)
+	dfs(start, target, maxDepth, 1, []string{})
 }
 
-func dfs(start string, target string, maxDepth, depth int, currPath []string, visited map[int]map[string]bool) bool {
+func dfs(start string, target string, maxDepth, depth int, currPath []string) bool {
 	if depth > maxDepth {
 		return false
 	}
@@ -35,8 +35,7 @@ func dfs(start string, target string, maxDepth, depth int, currPath []string, vi
 			fmt.Println("Found in depth:", ansDepth)
 		}
 
-		if !visited[depth][link] {
-			visited[depth][link] = true
+		if len(currPath) < maxDepth && !strings.HasPrefix(link, "#") && !strings.HasPrefix(link, "http") {
 			_, exists := queue.Get(h.Request.AbsoluteURL(link))
 			if strings.HasPrefix(link, "/wiki/") &&
 				!strings.Contains(link, "File:") &&
@@ -51,10 +50,10 @@ func dfs(start string, target string, maxDepth, depth int, currPath []string, vi
 				!strings.Contains(link, "User:") &&
 				!strings.Contains(link, "_talk:") &&
 				(link != "/wiki/Main_Page") &&
-				!exists && len(currPath) < maxDepth {
+				!exists {
 				queue.Set(h.Request.AbsoluteURL(link), true)
 				fmt.Printf("%s - depth: %d\n", h.Request.AbsoluteURL(link), depth)
-				dfs(extractTitle(link), target, maxDepth, depth+1, append(currPath, h.Request.AbsoluteURL(link)), visited)
+				dfs(extractTitle(link), target, maxDepth, depth+1, append(currPath, h.Request.AbsoluteURL(link)))
 			}
 		}
 	})
