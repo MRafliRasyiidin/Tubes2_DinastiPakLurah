@@ -9,10 +9,14 @@ import (
 )
 
 func crawler(start string, target string, maxDepth int) {
-	dfs(start, target, maxDepth, 1, []string{})
+	visited := make(map[int]map[string]bool)
+	for i := 1; i <= maxDepth; i++ {
+		visited[i] = make(map[string]bool)
+	}
+	dfs(start, target, maxDepth, 1, []string{}, visited)
 }
 
-func dfs(start string, target string, maxDepth, depth int, currPath []string) bool {
+func dfs(start string, target string, maxDepth, depth int, currPath []string, visited map[int]map[string]bool) bool {
 	if depth > maxDepth {
 		return false
 	}
@@ -31,24 +35,27 @@ func dfs(start string, target string, maxDepth, depth int, currPath []string) bo
 			fmt.Println("Found in depth:", ansDepth)
 		}
 
-		_, exists := queue.Get(h.Request.AbsoluteURL(link))
-		if strings.HasPrefix(link, "/wiki/") &&
-			!strings.Contains(link, "File:") &&
-			!strings.Contains(link, "Help:") &&
-			!strings.Contains(link, "Category:") &&
-			!strings.Contains(link, "Wikipedia:") &&
-			!strings.Contains(link, "Talk:") &&
-			!strings.Contains(link, "Special:") &&
-			!strings.Contains(link, "Portal:") &&
-			!strings.Contains(link, "Template:") &&
-			!strings.Contains(link, "MediaWiki:") &&
-			!strings.Contains(link, "User:") &&
-			!strings.Contains(link, "_talk:") &&
-			(link != "/wiki/Main_Page") &&
-			!exists && len(currPath) < maxDepth {
-			queue.Set(h.Request.AbsoluteURL(link), true)
-			fmt.Printf("%s - depth: %d\n", h.Request.AbsoluteURL(link), depth)
-			dfs(start, target, maxDepth, depth+1, append(currPath, h.Request.AbsoluteURL(link)))
+		if !visited[depth][link] {
+			visited[depth][link] = true
+			_, exists := queue.Get(h.Request.AbsoluteURL(link))
+			if strings.HasPrefix(link, "/wiki/") &&
+				!strings.Contains(link, "File:") &&
+				!strings.Contains(link, "Help:") &&
+				!strings.Contains(link, "Category:") &&
+				!strings.Contains(link, "Wikipedia:") &&
+				!strings.Contains(link, "Talk:") &&
+				!strings.Contains(link, "Special:") &&
+				!strings.Contains(link, "Portal:") &&
+				!strings.Contains(link, "Template:") &&
+				!strings.Contains(link, "MediaWiki:") &&
+				!strings.Contains(link, "User:") &&
+				!strings.Contains(link, "_talk:") &&
+				(link != "/wiki/Main_Page") &&
+				!exists && len(currPath) < maxDepth {
+				queue.Set(h.Request.AbsoluteURL(link), true)
+				fmt.Printf("%s - depth: %d\n", h.Request.AbsoluteURL(link), depth)
+				dfs(extractTitle(link), target, maxDepth, depth+1, append(currPath, h.Request.AbsoluteURL(link)), visited)
+			}
 		}
 	})
 
@@ -72,4 +79,11 @@ func dfs(start string, target string, maxDepth, depth int, currPath []string) bo
 	c.Visit("https://en.wikipedia.org/wiki/" + strings.ReplaceAll(start, " ", "_"))
 	c.Wait()
 	return !continueSearch
+}
+
+func extractTitle(url string) string {
+	parts := strings.Split(url, "/")
+	title := parts[len(parts)-1]
+	title = strings.ReplaceAll(title, "_", " ")
+	return title
 }
