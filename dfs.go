@@ -9,16 +9,12 @@ import (
 )
 
 func crawler(start string, target string, maxDepth int) {
-	visited := make(map[int]map[string]bool)
-	for i := 1; i <= maxDepth; i++ {
-		visited[i] = make(map[string]bool)
-	}
 	dfs(start, target, maxDepth, 1, []string{})
 }
 
-func dfs(start string, target string, maxDepth, depth int, currPath []string) bool {
+func dfs(start string, target string, maxDepth, depth int, currPath []string) {
 	if depth > maxDepth {
-		return false
+		return
 	}
 
 	queue := orderedmap.New()
@@ -29,6 +25,7 @@ func dfs(start string, target string, maxDepth, depth int, currPath []string) bo
 
 	c.OnHTML("a[href]", func(h *colly.HTMLElement) {
 		link := h.Attr("href")
+
 		if link == "/wiki/"+strings.ReplaceAll(target, " ", "_") {
 			continueSearch = false
 			ansDepth := len(currPath)
@@ -51,8 +48,8 @@ func dfs(start string, target string, maxDepth, depth int, currPath []string) bo
 				!strings.Contains(link, "_talk:") &&
 				(link != "/wiki/Main_Page") &&
 				!exists {
-				queue.Set(h.Request.AbsoluteURL(link), true)
 				fmt.Printf("%s - depth: %d\n", h.Request.AbsoluteURL(link), depth)
+				queue.Set(h.Request.AbsoluteURL(link), true)
 				dfs(extractTitle(link), target, maxDepth, depth+1, append(currPath, h.Request.AbsoluteURL(link)))
 			}
 		}
@@ -73,11 +70,21 @@ func dfs(start string, target string, maxDepth, depth int, currPath []string) bo
 	c.OnScraped(func(r *colly.Response) {
 		fmt.Println("Finished", r.Request.URL)
 		queue.Delete(r.Request.URL.String())
+		var link string
+		link = ""
+		for key := queue.Oldest(); key != nil; key = key.Next() {
+			link = key.Key.(string)
+			break
+		}
+		currPath = currPath[:len(currPath)-1]
+		if continueSearch && len(currPath) <= depth {
+			currPath = append(currPath, link)
+			c.Visit(link)
+		}
 	})
 
 	c.Visit("https://en.wikipedia.org/wiki/" + strings.ReplaceAll(start, " ", "_"))
 	c.Wait()
-	return !continueSearch
 }
 
 func extractTitle(url string) string {
