@@ -9,28 +9,28 @@ import (
 )
 
 func crawler(start string, target string, maxDepth int) {
-
-	for depth := 1; depth <= maxDepth; depth++ {
-		fmt.Println("Depth: ", depth)
-		if dfs(start, target, depth) {
-			return
-		}
-	}
+	dfs(start, target, maxDepth, 1, []string{})
 }
 
-func dfs(start string, target string, depth int) bool {
+func dfs(start string, target string, maxDepth, depth int, currPath []string) bool {
+	if depth > maxDepth {
+		return false
+	}
+
 	queue := orderedmap.New()
-	var currPath []string
 	continueSearch := true
+
 	c := colly.NewCollector(
 		colly.AllowedDomains("en.wikipedia.org"))
+
 	c.OnHTML("a[href]", func(h *colly.HTMLElement) {
 		link := h.Attr("href")
 		if link == "/wiki/"+strings.ReplaceAll(target, " ", "_") {
 			continueSearch = false
 			ansDepth := len(currPath)
-			fmt.Println("Found in depth: ", ansDepth)
+			fmt.Println("Found in depth:", ansDepth)
 		}
+
 		_, exists := queue.Get(h.Request.AbsoluteURL(link))
 		if strings.HasPrefix(link, "/wiki/") &&
 			!strings.Contains(link, "File:") &&
@@ -45,10 +45,10 @@ func dfs(start string, target string, depth int) bool {
 			!strings.Contains(link, "User:") &&
 			!strings.Contains(link, "_talk:") &&
 			(link != "/wiki/Main_Page") &&
-			!exists && len(currPath) <= depth {
+			!exists && len(currPath) < maxDepth {
 			queue.Set(h.Request.AbsoluteURL(link), true)
-			// fmt.Println(h.Request.AbsoluteURL(link))
-			fmt.Printf("%s at depth %d\n", h.Request.AbsoluteURL(link), len(currPath))
+			fmt.Printf("%s - depth: %d\n", h.Request.AbsoluteURL(link), depth)
+			dfs(start, target, maxDepth, depth+1, append(currPath, h.Request.AbsoluteURL(link)))
 		}
 	})
 
@@ -67,22 +67,9 @@ func dfs(start string, target string, depth int) bool {
 	c.OnScraped(func(r *colly.Response) {
 		fmt.Println("Finished", r.Request.URL)
 		queue.Delete(r.Request.URL.String())
-		var link string
-		link = ""
-		for key := queue.Oldest(); key != nil; key = key.Next() {
-			link = key.Key.(string)
-			break
-		}
-		currPath = currPath[:len(currPath)-1]
-		if continueSearch && len(currPath) <= depth {
-			currPath = append(currPath, link)
-			c.Visit(link)
-		}
 	})
 
-	currPath = append(currPath, "https://en.wikipedia.org/wiki/"+strings.ReplaceAll(start, " ", "_"))
 	c.Visit("https://en.wikipedia.org/wiki/" + strings.ReplaceAll(start, " ", "_"))
 	c.Wait()
-	fmt.Println(currPath)
 	return !continueSearch
 }
