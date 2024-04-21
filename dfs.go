@@ -7,15 +7,21 @@ import (
 	"github.com/gocolly/colly/v2"
 )
 
-func crawler(start string, target string, maxDepth int) {
-	dfs(start, target, maxDepth, 1, []string{})
+func crawler(start string, target string) {
+	maxDepth := 1
+	for {
+		if dfs(start, target, maxDepth, 1, []string{}) {
+			break
+		}
+		maxDepth++
+	}
 }
 
 var continueSearch bool = true
 
-func dfs(start string, target string, maxDepth, depth int, currPath []string) {
+func dfs(start string, target string, maxDepth, depth int, currPath []string) bool {
 	if depth > maxDepth || !continueSearch {
-		return
+		return false
 	}
 
 	c := colly.NewCollector(
@@ -69,6 +75,7 @@ func dfs(start string, target string, maxDepth, depth int, currPath []string) {
 		c.Visit("https://en.wikipedia.org/wiki/" + strings.ReplaceAll(start, " ", "_"))
 		c.Wait()
 	}
+	return !continueSearch
 }
 
 func isInPath(link string, path []string) bool {
