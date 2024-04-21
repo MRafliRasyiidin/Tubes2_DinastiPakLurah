@@ -8,9 +8,12 @@ import (
 )
 
 func crawler(start string, target string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("en.wikipedia.org"))
+
 	maxDepth := 1
 	for {
-		if dfs(start, target, maxDepth, 1, []string{}) {
+		if dfs(start, target, maxDepth, 1, []string{}, c) {
 			break
 		}
 		maxDepth++
@@ -19,13 +22,10 @@ func crawler(start string, target string) {
 
 var continueSearch bool = true
 
-func dfs(start string, target string, maxDepth, depth int, currPath []string) bool {
+func dfs(start string, target string, maxDepth, depth int, currPath []string, c *colly.Collector) bool {
 	if depth > maxDepth || !continueSearch {
 		return false
 	}
-
-	c := colly.NewCollector(
-		colly.AllowedDomains("en.wikipedia.org"))
 
 	c.OnHTML("a[href]", func(h *colly.HTMLElement) {
 		link := h.Attr("href")
@@ -49,7 +49,7 @@ func dfs(start string, target string, maxDepth, depth int, currPath []string) bo
 					!strings.Contains(link, "_talk:") &&
 					(link != "/wiki/Main_Page") {
 					fmt.Printf("%s - depth: %d\n", h.Request.AbsoluteURL(link), depth)
-					dfs(extractTitle(link), target, maxDepth, depth+1, append(currPath, link))
+					dfs(extractTitle(link), target, maxDepth, depth+1, append(currPath, link), c)
 				}
 			}
 		}
