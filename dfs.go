@@ -11,7 +11,7 @@ func crawler(start string, target string, maxDepth int) {
 	dfs(start, target, maxDepth, 1, []string{})
 }
 
-var continueSearch bool = true
+var continueSearch2 bool = true
 
 func dfs(start string, target string, maxDepth, depth int, currPath []string) {
 	if depth > maxDepth || !continueSearch {
@@ -41,7 +41,7 @@ func dfs(start string, target string, maxDepth, depth int, currPath []string) {
 					!strings.Contains(link, "MediaWiki:") &&
 					!strings.Contains(link, "User:") &&
 					!strings.Contains(link, "_talk:") &&
-					(link != "/wiki/Main_Page") {
+					(link != "/wiki/Main_Page") && extractTitle(link) != start {
 					fmt.Printf("%s - depth: %d\n", h.Request.AbsoluteURL(link), depth)
 					dfs(extractTitle(link), target, maxDepth, depth+1, append(currPath, link))
 				}
