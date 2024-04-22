@@ -89,25 +89,31 @@ func crawler(start, target string) ([]string, bool) {
 }
 
 func ids(start, target string, maxDepth int) ([]string, bool) {
+	found := false
+	var path []string
 	for depth := 1; depth <= maxDepth; depth++ {
-		fmt.Printf("Searching at depth %d...\n", depth)
-		visited := make(map[string]bool)
-		path, found := dfs(start, target, depth, visited, []string{start}, false)
-		if found {
-			return path, true
+		if !found {
+			fmt.Printf("Searching at depth %d...\n", depth)
+			visited := make(map[string]bool)
+			path, found = dfs(start, target, 1, depth, visited, []string{start}, false)
+			if found {
+				return path, true
+			}
+		} else {
+			break
 		}
 	}
 	return nil, false
 }
 
-func dfs(start, target string, depth int, visited map[string]bool, path []string, isFound bool) ([]string, bool) {
+func dfs(start, target string, depth, maxDepth int, visited map[string]bool, path []string, isFound bool) ([]string, bool) {
 	if isFound {
 		return path, true
 	}
-	if depth == 0 {
+	if depth > maxDepth {
 		return nil, false
 	}
-	if start == target {
+	if extractTitle(start) == extractTitle(target) {
 		return path, true
 	}
 	if visited[start] {
@@ -126,6 +132,7 @@ func dfs(start, target string, depth int, visited map[string]bool, path []string
 				isFound = true
 				fmt.Println("Found in depth: ", depth)
 			}
+			newLink := extractTitle(link)
 			if !strings.HasPrefix(link, "#") && !strings.HasPrefix(link, "http") {
 				if strings.HasPrefix(link, "/wiki/") &&
 					!strings.Contains(link, "File:") &&
@@ -139,16 +146,20 @@ func dfs(start, target string, depth int, visited map[string]bool, path []string
 					!strings.Contains(link, "MediaWiki:") &&
 					!strings.Contains(link, "User:") &&
 					!strings.Contains(link, "_talk:") &&
-					(link != "/wiki/Main_Page") {
-					newLink := extractTitle(link)
+					(link != "/wiki/Main_Page") &&
+					!isInPath(newLink, path) {
 					newPath := append(path, newLink)
 					var result []string
-					result, isFound = dfs(newLink, target, depth-1, visited, newPath, isFound)
+					result, isFound = dfs(newLink, target, depth+1, maxDepth, visited, newPath, isFound)
 					if isFound {
 						fmt.Println("Path: found")
+						//print the path
 						fmt.Print("[")
-						for _, link := range result {
-							fmt.Print(link + "->")
+						for i, link := range result {
+							fmt.Print(link)
+							if i < len(result)-1 {
+								fmt.Print("->")
+							}
 						}
 						fmt.Print("]")
 						fmt.Println()

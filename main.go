@@ -1,5 +1,5 @@
 package main
 
 func main() {
-	crawler("Ring Of Fire", "Indonesia")
+	crawler("Ring of Fire", "Street dance")
 }
