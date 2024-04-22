@@ -1,380 +1,75 @@
+Searching at depth 1...
 Visiting https://en.wikipedia.org/wiki/Ring_Of_Fire
-https://en.wikipedia.org/wiki/Ring_of_Fire - depth: 1
+Found in depth:  1
+Path: found
+[Ring Of Fire->Indonesia->]
+Searching at depth 2...
+Visiting https://en.wikipedia.org/wiki/Ring_Of_Fire
 Visiting https://en.wikipedia.org/wiki/Ring_of_Fire
-https://en.wikipedia.org/wiki/Ring_of_Fire_(disambiguation) - depth: 2
+Found in depth:  1
+Path: found
+[Ring Of Fire->Ring of Fire->Indonesia->]
 Visiting https://en.wikipedia.org/wiki/Ring_of_Fire_(disambiguation)
-https://en.wikipedia.org/wiki/Ring_of_Fire_(1961_film) - depth: 3
-Visiting https://en.wikipedia.org/wiki/Ring_of_Fire_(1961_film)
-https://en.wikipedia.org/wiki/Andrew_L._Stone - depth: 4
-https://en.wikipedia.org/wiki/David_Janssen - depth: 4
-https://en.wikipedia.org/wiki/Joyce_Taylor - depth: 4
-https://en.wikipedia.org/wiki/Frank_Gorshin - depth: 4
-https://en.wikipedia.org/wiki/William_H._Clothier - depth: 4
-https://en.wikipedia.org/wiki/Virginia_L._Stone - depth: 4
-https://en.wikipedia.org/wiki/Duane_Eddy - depth: 4
-https://en.wikipedia.org/wiki/Metro-Goldwyn-Mayer - depth: 4
-https://en.wikipedia.org/wiki/Metrocolor - depth: 4
-https://en.wikipedia.org/wiki/David_Janssen - depth: 4
-https://en.wikipedia.org/wiki/Joyce_Taylor - depth: 4
-https://en.wikipedia.org/wiki/Frank_Gorshin - depth: 4
-https://en.wikipedia.org/wiki/Vernonia,_Oregon - depth: 4
-https://en.wikipedia.org/wiki/Wynoochee_River - depth: 4
-https://en.wikipedia.org/wiki/Washington_(state) - depth: 4
-https://en.wikipedia.org/wiki/Ring_of_Fire_(Duane_Eddy_song) - depth: 4
-https://en.wikipedia.org/wiki/Duane_Eddy - depth: 4
-https://en.wikipedia.org/wiki/Washington_(state) - depth: 4
-https://en.wikipedia.org/wiki/Shelton,_Washington - depth: 4
-https://en.wikipedia.org/wiki/Aberdeen,_Washington - depth: 4
-https://en.wikipedia.org/wiki/Mason_County,_Washington - depth: 4
-https://en.wikipedia.org/wiki/David_Janssen - depth: 4
-https://en.wikipedia.org/wiki/Joyce_Taylor - depth: 4
-https://en.wikipedia.org/wiki/Frank_Gorshin - depth: 4
-https://en.wikipedia.org/wiki/Marshall_Kent_(actor) - depth: 4
-https://en.wikipedia.org/wiki/Doodles_Weaver - depth: 4
-https://en.wikipedia.org/wiki/List_of_American_films_of_1961 - depth: 4
-https://en.wikipedia.org/wiki/IMDb - depth: 4
-https://en.wikipedia.org/wiki/IMDb_(identifier) - depth: 4
-https://en.wikipedia.org/wiki/AllMovie - depth: 4
-https://en.wikipedia.org/wiki/Turner_Classic_Movies - depth: 4
-https://en.wikipedia.org/wiki/AFI_Catalog_of_Feature_Films - depth: 4
-https://en.wikipedia.org/wiki/Andrew_L._Stone - depth: 4
-https://en.wikipedia.org/wiki/Dreary_House - depth: 4
-https://en.wikipedia.org/wiki/Shadows_of_Glory - depth: 4
-https://en.wikipedia.org/wiki/Hell%27s_Headquarters - depth: 4
-https://en.wikipedia.org/wiki/The_Girl_Said_No_(1937_film) - depth: 4
-https://en.wikipedia.org/wiki/With_Words_and_Music - depth: 4
-https://en.wikipedia.org/wiki/Stolen_Heaven_(1938_film) - depth: 4
-https://en.wikipedia.org/wiki/Say_It_in_French - depth: 4
-https://en.wikipedia.org/wiki/The_Great_Victor_Herbert - depth: 4
-https://en.wikipedia.org/wiki/The_Hard-Boiled_Canary - depth: 4
-https://en.wikipedia.org/wiki/Stormy_Weather_(1943_film) - depth: 4
-https://en.wikipedia.org/wiki/Hi_Diddle_Diddle - depth: 4
-https://en.wikipedia.org/wiki/Sensations_of_1945 - depth: 4
-https://en.wikipedia.org/wiki/Bedside_Manner_(film) - depth: 4
-https://en.wikipedia.org/wiki/The_Bachelor%27s_Daughters - depth: 4
-https://en.wikipedia.org/wiki/Fun_on_a_Weekend - depth: 4
-https://en.wikipedia.org/wiki/The_Countess_of_Monte_Cristo_(1948_film) - depth: 4
-https://en.wikipedia.org/wiki/Highway_301_(film) - depth: 4
-https://en.wikipedia.org/wiki/Confidence_Girl - depth: 4
-https://en.wikipedia.org/wiki/The_Steel_Trap - depth: 4
-https://en.wikipedia.org/wiki/A_Blueprint_for_Murder - depth: 4
-https://en.wikipedia.org/wiki/The_Night_Holds_Terror - depth: 4
-https://en.wikipedia.org/wiki/Julie_(1956_film) - depth: 4
-https://en.wikipedia.org/wiki/Cry_Terror! - depth: 4
-https://en.wikipedia.org/wiki/The_Decks_Ran_Red - depth: 4
-https://en.wikipedia.org/wiki/The_Last_Voyage - depth: 4
-https://en.wikipedia.org/wiki/The_Password_Is_Courage - depth: 4
-https://en.wikipedia.org/wiki/Never_Put_It_in_Writing - depth: 4
-https://en.wikipedia.org/wiki/The_Secret_of_My_Success_(1965_film) - depth: 4
-https://en.wikipedia.org/wiki/Song_of_Norway_(film) - depth: 4
-https://en.wikipedia.org/wiki/The_Great_Waltz_(1972_film) - depth: 4
-Finished https://en.wikipedia.org/wiki/Ring_of_Fire_(1961_film)
-https://en.wikipedia.org/wiki/Andreas_Hykade - depth: 3
-Visiting https://en.wikipedia.org/wiki/Andreas_Hykade
-https://en.wikipedia.org/wiki/Alt%C3%B6tting - depth: 4
-https://en.wikipedia.org/wiki/Bavaria - depth: 4
-https://en.wikipedia.org/wiki/Stuttgart - depth: 4
-https://en.wikipedia.org/wiki/Alt%C3%B6tting - depth: 4
-https://en.wikipedia.org/wiki/Filmakademie_Baden-W%C3%BCrttemberg - depth: 4
-https://en.wikipedia.org/wiki/Gigi_D%27Agostino - depth: 4
-https://en.wikipedia.org/wiki/La_Linea_(TV_series) - depth: 4
-https://en.wikipedia.org/wiki/Osvaldo_Cavandoli - depth: 4
-https://en.wikipedia.org/wiki/Diary_of_a_Wimpy_Kid - depth: 4
-https://en.wikipedia.org/wiki/Jeff_Kinney - depth: 4
-https://en.wikipedia.org/wiki/Nickelodeon_(UK_and_Ireland) - depth: 4
-https://en.wikipedia.org/wiki/Harvard_University - depth: 4
-https://en.wikipedia.org/wiki/Academy_of_Motion_Picture_Arts_and_Sciences - depth: 4
-https://en.wikipedia.org/wiki/Zehn_kleine_J%C3%A4germeister - depth: 4
-https://en.wikipedia.org/wiki/Die_Toten_Hosen - depth: 4
-https://en.wikipedia.org/wiki/The_Riddle_(Nik_Kershaw_song) - depth: 4
-https://en.wikipedia.org/wiki/Gigi_D%27Agostino - depth: 4
-https://en.wikipedia.org/wiki/Bla_Bla_Bla_(Gigi_D%27Agostino_song) - depth: 4
-https://en.wikipedia.org/wiki/Gigi_D%27Agostino - depth: 4
-https://en.wikipedia.org/wiki/Tom_und_das_Erdbeermarmeladebrot_mit_Honig - depth: 4
-https://en.wikipedia.org/wiki/Walkampf - depth: 4
-https://en.wikipedia.org/wiki/Die_Toten_Hosen - depth: 4
-https://en.wikipedia.org/wiki/Rocket_Boy_and_Toro - depth: 4
-https://en.wikipedia.org/wiki/Nuggets_(film) - depth: 4
-https://en.wikipedia.org/wiki/National_Film_Board_of_Canada - depth: 4
-https://en.wikipedia.org/wiki/IMDb_(identifier) - depth: 4
-Finished https://en.wikipedia.org/wiki/Andreas_Hykade
-https://en.wikipedia.org/wiki/Ring_of_Fire_(2013_film) - depth: 3
-Visiting https://en.wikipedia.org/wiki/Ring_of_Fire_(2013_film)
-https://en.wikipedia.org/wiki/Biographical_drama - depth: 4
-https://en.wikipedia.org/wiki/John_Carter_Cash - depth: 4
-https://en.wikipedia.org/wiki/Richard_Friedenberg - depth: 4
-https://en.wikipedia.org/wiki/Allison_Anders - depth: 4
-https://en.wikipedia.org/wiki/Jewel_Kilcher - depth: 4
-https://en.wikipedia.org/wiki/Matt_Ross_(actor) - depth: 4
-https://en.wikipedia.org/wiki/Anton_Sanko - depth: 4
-https://en.wikipedia.org/wiki/Lifetime_(TV_network) - depth: 4
-https://en.wikipedia.org/wiki/Biographical_drama - depth: 4
-https://en.wikipedia.org/wiki/Television_film - depth: 4
-https://en.wikipedia.org/wiki/Allison_Anders - depth: 4
-https://en.wikipedia.org/wiki/Richard_Friedenberg - depth: 4
-https://en.wikipedia.org/wiki/June_Carter_Cash - depth: 4
-https://en.wikipedia.org/wiki/Johnny_Cash - depth: 4
-https://en.wikipedia.org/wiki/John_Carter_Cash - depth: 4
-https://en.wikipedia.org/wiki/Jewel_Kilcher - depth: 4
-https://en.wikipedia.org/wiki/Matt_Ross_(actor) - depth: 4
-https://en.wikipedia.org/wiki/Lifetime_(TV_network) - depth: 4
-https://en.wikipedia.org/wiki/Primetime_Emmy - depth: 4
-https://en.wikipedia.org/wiki/Primetime_Emmy_Award_for_Outstanding_Directing_for_a_Miniseries,_Movie_or_a_Dramatic_Special - depth: 4
-https://en.wikipedia.org/wiki/Jewel_(singer) - depth: 4
-https://en.wikipedia.org/wiki/June_Carter_Cash - depth: 4
-https://en.wikipedia.org/wiki/Matt_Ross_(actor) - depth: 4
-https://en.wikipedia.org/wiki/Johnny_Cash - depth: 4
-https://en.wikipedia.org/wiki/John_Doe_(musician) - depth: 4
-https://en.wikipedia.org/wiki/A._P._Carter - depth: 4
-https://en.wikipedia.org/wiki/Frances_Conroy - depth: 4
-https://en.wikipedia.org/wiki/Maybelle_Carter - depth: 4
-https://en.wikipedia.org/wiki/John_Carter_Cash - depth: 4
-https://en.wikipedia.org/wiki/Primetime_Emmy_Award - depth: 4
-https://en.wikipedia.org/wiki/IMDb_(identifier) - depth: 4
-https://en.wikipedia.org/wiki/AllMovie - depth: 4
-https://en.wikipedia.org/wiki/Turner_Classic_Movies - depth: 4
-https://en.wikipedia.org/wiki/Johnny_Cash - depth: 4
-https://en.wikipedia.org/wiki/Johnny_Cash_albums_discography - depth: 4
-https://en.wikipedia.org/wiki/Johnny_Cash_singles_discography - depth: 4
-https://en.wikipedia.org/wiki/Johnny_Cash_Sun_Records_discography - depth: 4
-https://en.wikipedia.org/wiki/List_of_songs_recorded_by_Johnny_Cash - depth: 4
-https://en.wikipedia.org/wiki/List_of_awards_and_nominations_received_by_Johnny_Cash - depth: 4
-https://en.wikipedia.org/wiki/Johnny_Cash_with_His_Hot_and_Blue_Guitar! - depth: 4
-https://en.wikipedia.org/wiki/The_Fabulous_Johnny_Cash - depth: 4
-https://en.wikipedia.org/wiki/Hymns_by_Johnny_Cash - depth: 4
-https://en.wikipedia.org/wiki/Songs_of_Our_Soil - depth: 4
-https://en.wikipedia.org/wiki/Ride_This_Train - depth: 4
-https://en.wikipedia.org/wiki/Now,_There_Was_a_Song! - depth: 4
-https://en.wikipedia.org/wiki/Hymns_from_the_Heart - depth: 4
-https://en.wikipedia.org/wiki/The_Sound_of_Johnny_Cash - depth: 4
-https://en.wikipedia.org/wiki/Blood,_Sweat_and_Tears_(album) - depth: 4
-https://en.wikipedia.org/wiki/The_Christmas_Spirit - depth: 4
-https://en.wikipedia.org/wiki/I_Walk_the_Line_(1964_album) - depth: 4
-https://en.wikipedia.org/wiki/Bitter_Tears:_Ballads_of_the_American_Indian - depth: 4
-https://en.wikipedia.org/wiki/Orange_Blossom_Special_(album) - depth: 4
-https://en.wikipedia.org/wiki/Johnny_Cash_Sings_the_Ballads_of_the_True_West - depth: 4
-https://en.wikipedia.org/wiki/Everybody_Loves_a_Nut - depth: 4
-https://en.wikipedia.org/wiki/Happiness_Is_You - depth: 4
-https://en.wikipedia.org/wiki/Carryin%27_On_with_Johnny_Cash_%26_June_Carter - depth: 4
-https://en.wikipedia.org/wiki/From_Sea_to_Shining_Sea - depth: 4
-https://en.wikipedia.org/wiki/The_Holy_Land_(album) - depth: 4
-https://en.wikipedia.org/wiki/Hello,_I%27m_Johnny_Cash - depth: 4
-https://en.wikipedia.org/wiki/Man_in_Black_(album) - depth: 4
-https://en.wikipedia.org/wiki/A_Thing_Called_Love - depth: 4
-https://en.wikipedia.org/wiki/America:_A_200-Year_Salute_in_Story_and_Song - depth: 4
-https://en.wikipedia.org/wiki/The_Johnny_Cash_Family_Christmas - depth: 4
-https://en.wikipedia.org/wiki/Any_Old_Wind_That_Blows - depth: 4
-https://en.wikipedia.org/wiki/Johnny_Cash_and_His_Woman - depth: 4
-https://en.wikipedia.org/wiki/Ragged_Old_Flag - depth: 4
-https://en.wikipedia.org/wiki/The_Junkie_and_the_Juicehead_Minus_Me - depth: 4
-https://en.wikipedia.org/wiki/The_Johnny_Cash_Children%27s_Album - depth: 4
-https://en.wikipedia.org/wiki/Johnny_Cash_Sings_Precious_Memories - depth: 4
-https://en.wikipedia.org/wiki/John_R._Cash_(album) - depth: 4
-https://en.wikipedia.org/wiki/Look_at_Them_Beans - depth: 4
-https://en.wikipedia.org/wiki/One_Piece_at_a_Time_(album) - depth: 4
-https://en.wikipedia.org/wiki/The_Last_Gunfighter_Ballad - depth: 4
-https://en.wikipedia.org/wiki/The_Rambler_(album) - depth: 4
-https://en.wikipedia.org/wiki/I_Would_Like_to_See_You_Again - depth: 4
-https://en.wikipedia.org/wiki/Gone_Girl_(album) - depth: 4
-https://en.wikipedia.org/wiki/Silver_(Johnny_Cash_album) - depth: 4
-https://en.wikipedia.org/wiki/A_Believer_Sings_the_Truth - depth: 4
-https://en.wikipedia.org/wiki/Rockabilly_Blues - depth: 4
-https://en.wikipedia.org/wiki/Classic_Christmas_(Johnny_Cash_album) - depth: 4
-https://en.wikipedia.org/wiki/The_Baron_(album) - depth: 4
-https://en.wikipedia.org/wiki/The_Adventures_of_Johnny_Cash - depth: 4
-https://en.wikipedia.org/wiki/Johnny_99 - depth: 4
-https://en.wikipedia.org/wiki/Highwayman_(The_Highwaymen_album) - depth: 4
-https://en.wikipedia.org/wiki/Rainbow_(Johnny_Cash_album) - depth: 4
-https://en.wikipedia.org/wiki/Class_of_%2755:_Memphis_Rock_%26_Roll_Homecoming - depth: 4
-https://en.wikipedia.org/wiki/Heroes_(Johnny_Cash_and_Waylon_Jennings_album) - depth: 4
-https://en.wikipedia.org/wiki/Believe_in_Him - depth: 4
-https://en.wikipedia.org/wiki/Johnny_Cash_Is_Coming_to_Town - depth: 4
-https://en.wikipedia.org/wiki/Classic_Cash:_Hall_of_Fame_Series - depth: 4
-https://en.wikipedia.org/wiki/Water_from_the_Wells_of_Home - depth: 4
-https://en.wikipedia.org/wiki/Highwayman_2 - depth: 4
-https://en.wikipedia.org/wiki/Boom_Chicka_Boom - depth: 4
-https://en.wikipedia.org/wiki/The_Mystery_of_Life - depth: 4
-https://en.wikipedia.org/wiki/Country_Christmas_(Johnny_Cash_album) - depth: 4
-https://en.wikipedia.org/wiki/American_Recordings_(album) - depth: 4
-https://en.wikipedia.org/wiki/The_Road_Goes_On_Forever_(The_Highwaymen_album) - depth: 4
-https://en.wikipedia.org/wiki/Unchained_(Johnny_Cash_album) - depth: 4
-https://en.wikipedia.org/wiki/American_III:_Solitary_Man - depth: 4
-https://en.wikipedia.org/wiki/American_IV:_The_Man_Comes_Around - depth: 4
-https://en.wikipedia.org/wiki/American_V:_A_Hundred_Highways - depth: 4
-https://en.wikipedia.org/wiki/American_VI:_Ain%27t_No_Grave - depth: 4
-https://en.wikipedia.org/wiki/Out_Among_the_Stars - depth: 4
-https://en.wikipedia.org/wiki/At_Folsom_Prison - depth: 4
-https://en.wikipedia.org/wiki/At_San_Quentin - depth: 4
-https://en.wikipedia.org/wiki/The_Johnny_Cash_Show_(album) - depth: 4
-https://en.wikipedia.org/wiki/P%C3%A5_%C3%96ster%C3%A5ker - depth: 4
-https://en.wikipedia.org/wiki/Strawberry_Cake - depth: 4
-https://en.wikipedia.org/wiki/Koncert_v_Praze_(In_Prague_%E2%80%93_Live) - depth: 4
-https://en.wikipedia.org/wiki/VH1_Storytellers:_Johnny_Cash_%26_Willie_Nelson - depth: 4
-https://en.wikipedia.org/wiki/Johnny_Cash_at_Madison_Square_Garden - depth: 4
-https://en.wikipedia.org/wiki/A_Concert_Behind_Prison_Walls - depth: 4
-https://en.wikipedia.org/wiki/I_Walk_the_Line_(soundtrack_album) - depth: 4
-https://en.wikipedia.org/wiki/Little_Fauss_and_Big_Halsy_(soundtrack) - depth: 4
-https://en.wikipedia.org/wiki/Johnny_Cash_Sings_the_Songs_That_Made_Him_Famous - depth: 4
-https://en.wikipedia.org/wiki/Greatest! - depth: 4
-https://en.wikipedia.org/wiki/Johnny_Cash_Sings_Hank_Williams - depth: 4
-https://en.wikipedia.org/wiki/Now_Here%27s_Johnny_Cash - depth: 4
-https://en.wikipedia.org/wiki/All_Aboard_the_Blue_Train_with_Johnny_Cash - depth: 4
-https://en.wikipedia.org/wiki/Original_Sun_Sound_of_Johnny_Cash - depth: 4
-https://en.wikipedia.org/wiki/Ring_of_Fire:_The_Best_of_Johnny_Cash - depth: 4
-https://en.wikipedia.org/wiki/Greatest_Hits,_Vol._1_(Johnny_Cash_album) - depth: 4
-https://en.wikipedia.org/wiki/Heart_of_Cash - depth: 4
-https://en.wikipedia.org/wiki/Greatest_Hits,_Vol._2_(Johnny_Cash_album) - depth: 4
-https://en.wikipedia.org/wiki/Sunday_Morning_Coming_Down_(album) - depth: 4
-https://en.wikipedia.org/wiki/International_Superstar - depth: 4
-https://en.wikipedia.org/wiki/Five_Feet_High_and_Rising - depth: 4
-https://en.wikipedia.org/wiki/Destination_Victoria_Station - depth: 4
-https://en.wikipedia.org/wiki/Greatest_Hits,_Vol._3_(Johnny_Cash_album) - depth: 4
-https://en.wikipedia.org/wiki/The_Unissued_Johnny_Cash - depth: 4
-https://en.wikipedia.org/wiki/Johnny_%26_June - depth: 4
-https://en.wikipedia.org/wiki/Tall_Man_(album) - depth: 4
-https://en.wikipedia.org/wiki/Encore_(Johnny_Cash_album) - depth: 4
-https://en.wikipedia.org/wiki/Biggest_Hits - depth: 4
-https://en.wikipedia.org/wiki/The_Man_in_Black_1954%E2%80%931958 - depth: 4
-https://en.wikipedia.org/wiki/The_Man_in_Black_1959%E2%80%931962 - depth: 4
-https://en.wikipedia.org/wiki/Come_Along_and_Ride_This_Train - depth: 4
-https://en.wikipedia.org/wiki/The_Essential_Johnny_Cash_(1992_album) - depth: 4
-https://en.wikipedia.org/wiki/Wanted_Man_(Johnny_Cash_album) - depth: 4
-https://en.wikipedia.org/wiki/The_Man_in_Black_1963%E2%80%931969 - depth: 4
-https://en.wikipedia.org/wiki/The_Man_in_Black_%E2%80%93_His_Greatest_Hits - depth: 4
-https://en.wikipedia.org/wiki/16_Biggest_Hits_(Johnny_Cash_album) - depth: 4
-https://en.wikipedia.org/wiki/Love,_God,_Murder - depth: 4
-https://en.wikipedia.org/wiki/The_Essential_Johnny_Cash_(2002_album) - depth: 4
-https://en.wikipedia.org/wiki/Unearthed_(Johnny_Cash_album) - depth: 4
-https://en.wikipedia.org/wiki/The_Legend_(Johnny_Cash_box_set) - depth: 4
-https://en.wikipedia.org/wiki/The_Legend_of_Johnny_Cash - depth: 4
-https://en.wikipedia.org/wiki/Patriot_(Johnny_Cash_album) - depth: 4
-https://en.wikipedia.org/wiki/16_Biggest_Hits_(Johnny_Cash_and_June_Carter_Cash_album) - depth: 4
-https://en.wikipedia.org/wiki/The_Legend_of_Johnny_Cash_Vol._II - depth: 4
-https://en.wikipedia.org/wiki/Johnny_Cash:_The_Complete_Columbia_Album_Collection - depth: 4
-https://en.wikipedia.org/wiki/Johnny_Cash_and_the_Royal_Philharmonic_Orchestra - depth: 4
-https://en.wikipedia.org/wiki/25_Minutes_to_Go - depth: 4
-https://en.wikipedia.org/wiki/Seasons_of_My_Heart - depth: 4
-https://en.wikipedia.org/wiki/Any_Old_Wind_That_Blows_(song) - depth: 4
-https://en.wikipedia.org/wiki/A_Wonderful_Time_Up_There - depth: 4
-https://en.wikipedia.org/wiki/The_Ballad_of_Boot_Hill - depth: 4
-https://en.wikipedia.org/wiki/The_Ballad_of_Ira_Hayes - depth: 4
-https://en.wikipedia.org/wiki/Ballad_of_a_Teenage_Queen - depth: 4
-https://en.wikipedia.org/wiki/Big_River_(Johnny_Cash_song) - depth: 4
-https://en.wikipedia.org/wiki/Blistered - depth: 4
-https://en.wikipedia.org/wiki/A_Boy_Named_Sue - depth: 4
-https://en.wikipedia.org/wiki/Busted_(Harlan_Howard_song) - depth: 4
-https://en.wikipedia.org/wiki/Cat%27s_in_the_Cradle - depth: 4
-https://en.wikipedia.org/wiki/Cocaine_Blues - depth: 4
-https://en.wikipedia.org/wiki/Cry!_Cry!_Cry! - depth: 4
-https://en.wikipedia.org/wiki/Daddy_Sang_Bass - depth: 4
-https://en.wikipedia.org/wiki/Dark_as_a_Dungeon - depth: 4
-https://en.wikipedia.org/wiki/Don%27t_Take_Your_Guns_to_Town - depth: 4
-https://en.wikipedia.org/wiki/Engine_One-Forty-Three - depth: 4
-https://en.wikipedia.org/wiki/Flesh_and_Blood_(song) - depth: 4
-https://en.wikipedia.org/wiki/The_Folk_Singer - depth: 4
-https://en.wikipedia.org/wiki/Folsom_Prison_Blues - depth: 4
-https://en.wikipedia.org/wiki/Forty_Shades_of_Green - depth: 4
-https://en.wikipedia.org/wiki/Get_Rhythm - depth: 4
-https://en.wikipedia.org/wiki/Give_My_Love_to_Rose - depth: 4
-https://en.wikipedia.org/wiki/Goodnight,_Irene - depth: 4
-https://en.wikipedia.org/wiki/Green,_Green_Grass_of_Home - depth: 4
-https://en.wikipedia.org/wiki/At_Folsom_Prison - depth: 4
-https://en.wikipedia.org/wiki/Guess_Things_Happen_That_Way - depth: 4
-https://en.wikipedia.org/wiki/Hey,_Porter - depth: 4
-https://en.wikipedia.org/wiki/Home_of_the_Blues - depth: 4
-https://en.wikipedia.org/wiki/Hurt_(Nine_Inch_Nails_song) - depth: 4
-https://en.wikipedia.org/wiki/I_Couldn%27t_Keep_from_Crying - depth: 4
-https://en.wikipedia.org/wiki/I_Love_You_Because_(song) - depth: 4
-https://en.wikipedia.org/wiki/I_Still_Miss_Someone - depth: 4
-https://en.wikipedia.org/wiki/I_Walk_the_Line - depth: 4
-https://en.wikipedia.org/wiki/If_I_Had_a_Hammer - depth: 4
-https://en.wikipedia.org/wiki/If_I_Were_a_Carpenter_(song) - depth: 4
-https://en.wikipedia.org/wiki/In_My_Life - depth: 4
-https://en.wikipedia.org/wiki/In_the_Jailhouse_Now - depth: 4
-https://en.wikipedia.org/wiki/It_Ain%27t_Me_Babe - depth: 4
-https://en.wikipedia.org/wiki/Jackson_(song) - depth: 4
-https://en.wikipedia.org/wiki/Kate_(Johnny_Cash_song) - depth: 4
-https://en.wikipedia.org/wiki/Last_Night_I_Had_the_Strangest_Dream - depth: 4
-https://en.wikipedia.org/wiki/The_Man_Comes_Around - depth: 4
-https://en.wikipedia.org/wiki/Man_in_Black_(song) - depth: 4
-https://en.wikipedia.org/wiki/The_Matador_(Johnny_Cash_song) - depth: 4
-https://en.wikipedia.org/wiki/Oh_Lonesome_Me - depth: 4
-https://en.wikipedia.org/wiki/One_Piece_at_a_Time - depth: 4
-https://en.wikipedia.org/wiki/Oney_(song) - depth: 4
-https://en.wikipedia.org/wiki/Orange_Blossom_Special_(song) - depth: 4
-https://en.wikipedia.org/wiki/The_One_on_the_Right_Is_on_the_Left - depth: 4
-https://en.wikipedia.org/wiki/Remember_the_Alamo_(song) - depth: 4
-https://en.wikipedia.org/wiki/(Ghost)_Riders_in_the_Sky:_A_Cowboy_Legend - depth: 4
-https://en.wikipedia.org/wiki/Ring_of_Fire_(song) - depth: 4
-https://en.wikipedia.org/wiki/Rock_Island_Line - depth: 4
-https://en.wikipedia.org/wiki/So_Doggone_Lonesome - depth: 4
-https://en.wikipedia.org/wiki/Sunday_Mornin%27_Comin%27_Down - depth: 4
-https://en.wikipedia.org/wiki/Tennessee_Flat_Top_Box - depth: 4
-https://en.wikipedia.org/wiki/There_Ain%27t_No_Good_Chain_Gang - depth: 4
-https://en.wikipedia.org/wiki/A_Thing_Called_Love_(song) - depth: 4
-https://en.wikipedia.org/wiki/Understand_Your_Man - depth: 4
-https://en.wikipedia.org/wiki/What_Is_Truth - depth: 4
-https://en.wikipedia.org/wiki/What%27d_I_Say - depth: 4
-https://en.wikipedia.org/wiki/Without_Love_(Nick_Lowe_song) - depth: 4
-https://en.wikipedia.org/wiki/You_Are_My_Sunshine - depth: 4
-https://en.wikipedia.org/wiki/The_Johnny_Cash_Show - depth: 4
-https://en.wikipedia.org/wiki/Man_in_Black:_His_Own_Story_in_His_Own_Words - depth: 4
-https://en.wikipedia.org/wiki/Cash:_The_Autobiography - depth: 4
-https://en.wikipedia.org/wiki/Johnny_Cash!_The_Man,_His_World,_His_Music - depth: 4
-https://en.wikipedia.org/wiki/My_Father_and_the_Man_in_Black - depth: 4
-https://en.wikipedia.org/wiki/Walk_the_Line - depth: 4
-https://en.wikipedia.org/wiki/Ring_of_Fire_(musical) - depth: 4
-https://en.wikipedia.org/wiki/The_Sound_Behind_Johnny_Cash - depth: 4
-https://en.wikipedia.org/wiki/Kindred_Spirits:_A_Tribute_to_the_Songs_of_Johnny_Cash - depth: 4
-https://en.wikipedia.org/wiki/Dressed_in_Black:_A_Tribute_to_Johnny_Cash - depth: 4
-https://en.wikipedia.org/wiki/Johnny%27s_Blues:_A_Tribute_to_Johnny_Cash - depth: 4
-https://en.wikipedia.org/wiki/Walk_the_Line_(soundtrack) - depth: 4
-https://en.wikipedia.org/wiki/Fade_to_Black:_Memories_of_Johnny - depth: 4
-https://en.wikipedia.org/wiki/All_Aboard:_A_Tribute_to_Johnny_Cash - depth: 4
-https://en.wikipedia.org/wiki/Johnny_Cash_Remixed - depth: 4
-https://en.wikipedia.org/wiki/We_Walk_the_Line:_A_Celebration_of_the_Music_of_Johnny_Cash - depth: 4
-https://en.wikipedia.org/wiki/Forever_Words - depth: 4
-https://en.wikipedia.org/wiki/The_Highwaymen_(country_supergroup) - depth: 4
-https://en.wikipedia.org/wiki/The_Tennessee_Three - depth: 4
-https://en.wikipedia.org/wiki/Bob_Wootton - depth: 4
-https://en.wikipedia.org/wiki/Carl_Perkins - depth: 4
-https://en.wikipedia.org/wiki/W._S._Holland - depth: 4
-https://en.wikipedia.org/wiki/Marshall_Grant - depth: 4
-https://en.wikipedia.org/wiki/Luther_Perkins - depth: 4
-https://en.wikipedia.org/wiki/Million_Dollar_Quartet - depth: 4
-https://en.wikipedia.org/wiki/The_Great_Eighties_Eight - depth: 4
-https://en.wikipedia.org/wiki/June_Carter_Cash - depth: 4
-https://en.wikipedia.org/wiki/John_Carter_Cash - depth: 4
-https://en.wikipedia.org/wiki/Rosanne_Cash - depth: 4
-https://en.wikipedia.org/wiki/Cindy_Cash - depth: 4
-https://en.wikipedia.org/wiki/Carlene_Carter - depth: 4
-https://en.wikipedia.org/wiki/Tommy_Cash - depth: 4
-https://en.wikipedia.org/wiki/Carter_Family - depth: 4
-https://en.wikipedia.org/wiki/Dyess,_Arkansas - depth: 4
-https://en.wikipedia.org/wiki/Johnny_Cash_Boyhood_Home - depth: 4
-https://en.wikipedia.org/wiki/Johnny_Cash_Museum - depth: 4
-https://en.wikipedia.org/wiki/House_of_Cash - depth: 4
-https://en.wikipedia.org/wiki/Carter_Family_Fold - depth: 4
-https://en.wikipedia.org/wiki/Allison_Anders - depth: 4
-https://en.wikipedia.org/wiki/Border_Radio - depth: 4
-https://en.wikipedia.org/wiki/Gas_Food_Lodging - depth: 4
-https://en.wikipedia.org/wiki/Mi_Vida_Loca - depth: 4
-https://en.wikipedia.org/wiki/Four_Rooms - depth: 4
-https://en.wikipedia.org/wiki/Grace_of_My_Heart - depth: 4
-https://en.wikipedia.org/wiki/Sugar_Town_(film) - depth: 4
-https://en.wikipedia.org/wiki/Things_Behind_the_Sun - depth: 4
-https://en.wikipedia.org/wiki/A_Crush_on_You - depth: 4
-https://en.wikipedia.org/wiki/Beaches_(2017_film) - depth: 4
-Finished https://en.wikipedia.org/wiki/Ring_of_Fire_(2013_film)
-https://en.wikipedia.org/wiki/Ring_of_Fire:_An_Indonesian_Odyssey - depth: 3
-Visiting https://en.wikipedia.org/wiki/Ring_of_Fire:_An_Indonesian_Odyssey
-https://en.wikipedia.org/wiki/Lawrence_Blair - depth: 4
-https://en.wikipedia.org/wiki/Lorne_Blair - depth: 4
-https://en.wikipedia.org/wiki/Mason_Daring - depth: 4
-https://en.wikipedia.org/wiki/David_Fanning_(journalist) - depth: 4
-Found in depth: 4
-https://en.wikipedia.org/wiki/Indonesia - depth: 4
-Finished https://en.wikipedia.org/wiki/Ring_of_Fire:_An_Indonesian_Odyssey
-Finished https://en.wikipedia.org/wiki/Ring_of_Fire_(disambiguation)
-Finished https://en.wikipedia.org/wiki/Ring_of_Fire
-Finished https://en.wikipedia.org/wiki/Ring_Of_Fire
+Visiting https://en.wikipedia.org/wiki/Tectonic
+Visiting https://en.wikipedia.org/wiki/Volcano
+Found in depth:  1
+Path: found
+[Ring Of Fire->Volcano->Indonesia->]
+Visiting https://en.wikipedia.org/wiki/Earthquake
+Visiting https://en.wikipedia.org/wiki/Pacific_Ocean
+Found in depth:  1
+Path: found
+[Ring Of Fire->Pacific Ocean->Indonesia->]
+Visiting https://en.wikipedia.org/wiki/Subduction
+Visiting https://en.wikipedia.org/wiki/Tectonic_plates
+Visiting https://en.wikipedia.org/wiki/Convergent_boundaries
+Visiting https://en.wikipedia.org/wiki/Antarctic_Plate
+Visiting https://en.wikipedia.org/wiki/Nazca_Plate
+Visiting https://en.wikipedia.org/wiki/Cocos_Plate
+Visiting https://en.wikipedia.org/wiki/South_American_Plate
+Visiting https://en.wikipedia.org/wiki/Pacific_Plate
+Visiting https://en.wikipedia.org/wiki/Juan_de_Fuca_Plate
+Visiting https://en.wikipedia.org/wiki/North_American_Plate
+Visiting https://en.wikipedia.org/wiki/Philippine_plate
+Visiting https://en.wikipedia.org/wiki/Eurasian_plate
+Visiting https://en.wikipedia.org/wiki/Australian_Plate
+Visiting https://en.wikipedia.org/wiki/Oceanic_trench
+Visiting https://en.wikipedia.org/wiki/Volcanic_arc
+Visiting https://en.wikipedia.org/wiki/Back-arc_basin
+Visiting https://en.wikipedia.org/wiki/Volcanic_belt
+Visiting https://en.wikipedia.org/wiki/Antarctic_Peninsula
+Visiting https://en.wikipedia.org/wiki/Extinct_volcano
+Found in depth:  1
+Path: found
+[Ring Of Fire->Extinct volcano->Indonesia->]
+Visiting https://en.wikipedia.org/wiki/Historical_times
+Visiting https://en.wikipedia.org/wiki/List_of_large_Holocene_volcanic_eruptions
+Visiting https://en.wikipedia.org/wiki/Stratovolcano
+Found in depth:  1
+Path: found
+[Ring Of Fire->Stratovolcano->Indonesia->]
+Visiting https://en.wikipedia.org/wiki/Mount_St_Helens
+Visiting https://en.wikipedia.org/wiki/Explosive_eruption
+Visiting https://en.wikipedia.org/wiki/Tephra
+Visiting https://en.wikipedia.org/wiki/Effusive_eruption
+Visiting https://en.wikipedia.org/wiki/Andesite
+Visiting https://en.wikipedia.org/wiki/Basaltic_andesite
+Visiting https://en.wikipedia.org/wiki/Dacite
+Visiting https://en.wikipedia.org/wiki/Rhyolite
+Visiting https://en.wikipedia.org/wiki/Basalt
+Visiting https://en.wikipedia.org/wiki/Shield_volcano
+Visiting https://en.wikipedia.org/wiki/Plosky_Tolbachik
+Visiting https://en.wikipedia.org/wiki/Seamount
+Visiting https://en.wikipedia.org/wiki/Monowai_(seamount)
+Visiting https://en.wikipedia.org/wiki/Burning
+Visiting https://en.wikipedia.org/wiki/George_Julius_Poulett_Scrope
+Visiting https://en.wikipedia.org/wiki/Perry_Expedition
+Visiting https://en.wikipedia.org/wiki/Tierra_del_Fuego
+Visiting https://en.wikipedia.org/wiki/Maluku_Islands
+Found in depth:  1
+Path: found
+[Ring Of Fire->Maluku Islands->Indonesia->]
+Visiting https://en.wikipedia.org/wiki/Scientific_American
+Visiting https://en.wikipedia.org/wiki/Patrick_Marshall
+Visiting https://en.wikipedia.org/wiki/Andesite_Line
+Visiting https://en.wikipedia.org/wiki/Plate_tectonics

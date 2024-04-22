@@ -1,5 +1,5 @@
 package main
 
 func main() {
-	crawler("Hoyoverse", "Wuthering Waves")
+	crawler("Ring Of Fire", "Indonesia")
 }
