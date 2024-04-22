@@ -158,7 +158,7 @@ func pageloader(start string) {
 	c.AllowURLRevisit = false
 
 	// Wtf is even Parallelism: 1000?? Me brainrot big number equals good
-	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 1, Delay: 100 * time.Millisecond})
+	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100, Delay: 100 * time.Millisecond})
 
 	c.OnRequest(func(r *colly.Request) {
 		// fmt.Println("Visiting", r.URL)
