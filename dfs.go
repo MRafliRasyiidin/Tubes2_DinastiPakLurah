@@ -57,7 +57,10 @@ func dfs(start, target string, depth, maxDepth int, visited map[string]bool, pat
 	visited[start] = true
 
 	c := colly.NewCollector(
-		colly.AllowedDomains("en.wikipedia.org"))
+		colly.AllowedDomains("en.wikipedia.org"),
+		colly.Async(true),
+		colly.CacheDir("./cache"),
+	)
 
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
