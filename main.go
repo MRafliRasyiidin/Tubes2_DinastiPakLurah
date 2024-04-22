@@ -1,5 +1,13 @@
 package main
 
+import (
+	"fmt"
+	"time"
+)
+
 func main() {
-	crawler("Ring of Fire", "Street dance")
+	start := time.Now()
+	crawler("Ring of Fire", "Nigger")
+	elapsed := time.Since(start)
+	fmt.Println("Time taken:", elapsed)
 }

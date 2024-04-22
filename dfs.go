@@ -95,7 +95,7 @@ func ids(start, target string, maxDepth int) ([]string, bool) {
 		if !found {
 			fmt.Printf("Searching at depth %d...\n", depth)
 			visited := make(map[string]bool)
-			path, found = dfs(start, target, 1, depth, visited, []string{start}, false)
+			path, found = dfs(start, target, 1, depth, visited, []string{start})
 			if found {
 				return path, true
 			}
@@ -106,10 +106,9 @@ func ids(start, target string, maxDepth int) ([]string, bool) {
 	return nil, false
 }
 
-func dfs(start, target string, depth, maxDepth int, visited map[string]bool, path []string, isFound bool) ([]string, bool) {
-	if isFound {
-		return path, true
-	}
+var isFound bool = false
+
+func dfs(start, target string, depth, maxDepth int, visited map[string]bool, path []string) ([]string, bool) {
 	if depth > maxDepth {
 		return nil, false
 	}
@@ -128,9 +127,14 @@ func dfs(start, target string, depth, maxDepth int, visited map[string]bool, pat
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
 		if !isFound {
+
+			/*
+				Bagian ini digunakan untuk single solution, atau multiple solution
+			*/
 			if link == "/wiki/"+strings.ReplaceAll(target, " ", "_") {
 				isFound = true
-				fmt.Println("Found in depth: ", depth)
+				ans := append(path, extractTitle(link))
+				printPath(ans)
 			}
 			newLink := extractTitle(link)
 			if !strings.HasPrefix(link, "#") && !strings.HasPrefix(link, "http") {
@@ -148,22 +152,14 @@ func dfs(start, target string, depth, maxDepth int, visited map[string]bool, pat
 					!strings.Contains(link, "_talk:") &&
 					(link != "/wiki/Main_Page") &&
 					!isInPath(newLink, path) {
-					newPath := append(path, newLink)
-					var result []string
-					result, isFound = dfs(newLink, target, depth+1, maxDepth, visited, newPath, isFound)
-					if isFound {
-						fmt.Println("Path: found")
-						//print the path
-						fmt.Print("[")
-						for i, link := range result {
-							fmt.Print(link)
-							if i < len(result)-1 {
-								fmt.Print("->")
-							}
-						}
-						fmt.Print("]")
-						fmt.Println()
-						return
+					var newPath []string
+					result, found := dfs(newLink, target, depth+1, maxDepth, visited, newPath)
+					/*
+						bagian ini berhubungan dengan single solution dan multiple solution
+					*/
+					if found {
+						isFound = true
+						printPath(result)
 					}
 				}
 			}
@@ -207,4 +203,18 @@ func extractTitle(url string) string {
 	title := parts[len(parts)-1]
 	title = strings.ReplaceAll(title, "_", " ")
 	return title
+}
+
+func printPath(path []string) {
+	fmt.Println("Path: found")
+	//print the path
+	fmt.Print("[")
+	for i, link := range path {
+		fmt.Print(link)
+		if i < len(path)-1 {
+			fmt.Print("->")
+		}
+	}
+	fmt.Print("]")
+	fmt.Println()
 }
