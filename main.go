@@ -37,26 +37,27 @@ import (
 	"sync"
 	"time"
 
+	"github.com/elliotchance/orderedmap/v2"
 	"github.com/gocolly/colly/v2"
 )
 
 func crawler(start string, target string) {
-	// queue := safeorderedmap.New[bool]()
-	var queue sync.Map
-	var path sync.Map
-	// path := safeorderedmap.New[string]()
-	// path := orderedmap.NewOrderedMap[string, string]()
+	var mutex sync.Mutex
+	queue := orderedmap.NewOrderedMap[string, any]()
+	path := orderedmap.NewOrderedMap[string, any]()
+	queueChild := orderedmap.NewOrderedMap[string, any]()
+	found := false
 	done := make(chan bool)
-	// urlChan := make(chan string)
+
 	c := colly.NewCollector(
 		colly.AllowedDomains("en.wikipedia.org"),
 		colly.Async(true),
-		colly.CacheDir("./cache"),
+		// colly.CacheDir("./cache"),
 	)
 	c.AllowURLRevisit = false
 
 	// Wtf is even Parallelism: 1000?? Me brainrot big number equals good
-	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100, Delay: 20 * time.Millisecond})
+	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100, RandomDelay: 25 * time.Millisecond})
 
 	c.OnRequest(func(r *colly.Request) {
 		// fmt.Println("Visiting", r.URL)
@@ -72,10 +73,15 @@ func crawler(start string, target string) {
 	})
 
 	c.OnHTML("a[href]", func(h *colly.HTMLElement) {
+		// time.Sleep(1 * time.Millisecond)
 		link := h.Attr("href")
 		visited, _ := c.HasVisited(link)
-		_, exists := queue.Load(h.Request.AbsoluteURL(link))
-		_, exists2 := path.Load(h.Request.AbsoluteURL(link))
+		mutex.Lock()
+		_, exists := queue.Get(h.Request.AbsoluteURL(link))
+		mutex.Unlock()
+		mutex.Lock()
+		_, exists2 := path.Get(h.Request.AbsoluteURL(link))
+		mutex.Unlock()
 		if strings.HasPrefix(link, "/wiki/") &&
 			!strings.Contains(link, "File:") &&
 			!strings.Contains(link, "Help:") &&
@@ -91,117 +97,62 @@ func crawler(start string, target string) {
 			link != "/wiki/Main_Page" &&
 			h.Request.AbsoluteURL(link) != h.Request.URL.String() &&
 			!exists && !visited {
-			queue.Store(h.Request.AbsoluteURL(link), true)
-			// path.Add(h.Request.AbsoluteURL(link), h.Request.URL.String())
-			if !exists2 {
-				path.Store(h.Request.AbsoluteURL(link), h.Request.URL.String())
-			}
+			mutex.Lock()
+			queueChild.Set(h.Request.AbsoluteURL(link), true)
+			mutex.Unlock()
 			// fmt.Println(h.Request.AbsoluteURL(link))
+			if !exists2 {
+				mutex.Lock()
+				path.Set(h.Request.AbsoluteURL(link), h.Request.URL.String())
+				mutex.Unlock()
+			}
 		}
 		if link == "/wiki/"+target {
-			path.Store(h.Request.AbsoluteURL(link), h.Request.URL.String())
-			// path.Add(h.Request.AbsoluteURL(link), h.Request.URL.String())
+			mutex.Lock()
+			path.Set(h.Request.AbsoluteURL(link), h.Request.URL.String())
+			mutex.Unlock()
+			found = true
 			done <- true
 			return
 		}
 	})
 
-	// Synced
-	// go func() {
-	// 	for url := range urlChan {
-	// 		c.Visit(url)
-	// 	}
-	// }()
-
 	c.OnScraped(func(r *colly.Response) {
 		// fmt.Println("Finished", r.Request.URL)
+		mutex.Lock()
 		queue.Delete(r.Request.URL.String())
-		var link string
-		link = ""
-		queue.Range(func(key, value any) bool {
-			link = key.(string)
-			c.Visit(link)
-			return true
-		})
-		// queue.Each(func(k string, e bool) {
-		// link = k
-		// c.Visit(link)
-		// urlChan <- k
-		// })
+		queue, queueChild = queueChild, queue
+		queueChild = orderedmap.NewOrderedMap[string, any]()
+		mutex.Unlock()
 	})
 
-	c.Visit("https://en.wikipedia.org/wiki/" + start)
+	queue.Set("https://en.wikipedia.org/wiki/"+start, true)
+
+queueIteration:
+	for {
+		mutex.Lock()
+		for el := queue.Front(); el != nil; el = el.Next() {
+			c.Visit(el.Key)
+		}
+		mutex.Unlock()
+		if found {
+			break queueIteration
+		}
+
+	}
 	go c.Wait()
 	<-done
-
-	// close(urlChan)
 
 	key := "https://en.wikipedia.org/wiki/" + target
 	for key != "https://en.wikipedia.org/wiki/"+start {
 		fmt.Println("Key : ", key)
-		value, _ := path.Load(key)
+		value, _ := path.Get(key)
 		key = value.(string)
 	}
 	// fmt.Println("Key : ", key)
 	// path.Each(func(key, value string) {
 	// 	fmt.Println("PATH:", key, value)
 	// })
-}
-
-func pageloader(start string) {
-	done := make(chan bool)
-	c := colly.NewCollector(
-		colly.AllowedDomains("en.wikipedia.org"),
-		colly.Async(false),
-		colly.CacheDir("./cache"),
-	)
-	c.AllowURLRevisit = false
-
-	// Wtf is even Parallelism: 1000?? Me brainrot big number equals good
-	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100, Delay: 100 * time.Millisecond})
-
-	c.OnRequest(func(r *colly.Request) {
-		// fmt.Println("Visiting", r.URL)
-	})
-
-	c.OnError(func(_ *colly.Response, err error) {
-		fmt.Println("Something went wrong:", err)
-	})
-
-	c.OnResponse(func(r *colly.Response) {
-		// I need to track how many links are fully visited
-		fmt.Println("Visited", r.Request.URL)
-	})
-
-	c.OnHTML("a[href]", func(h *colly.HTMLElement) {
-		link := h.Attr("href")
-		if strings.HasPrefix(link, "/wiki/") &&
-			!strings.Contains(link, "File:") &&
-			!strings.Contains(link, "Help:") &&
-			!strings.Contains(link, "Category:") &&
-			!strings.Contains(link, "Wikipedia:") &&
-			!strings.Contains(link, "Talk:") &&
-			!strings.Contains(link, "Special:") &&
-			!strings.Contains(link, "Portal:") &&
-			!strings.Contains(link, "Template:") &&
-			!strings.Contains(link, "MediaWiki:") &&
-			!strings.Contains(link, "User:") &&
-			!strings.Contains(link, "_talk:") &&
-
-			h.Request.AbsoluteURL(link) != h.Request.URL.String() &&
-			link != "/wiki/Main_Page" {
-			fmt.Println(link)
-		}
-	})
-
-	c.OnScraped(func(r *colly.Response) {
-		fmt.Println("Finished", r.Request.URL)
-		done <- true
-	})
-
-	c.Visit("https://en.wikipedia.org/wiki/" + start)
-	go c.Wait()
-	<-done
 }
 
 func main() {
