@@ -1,9 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -25,7 +25,7 @@ func crawlerDLS(start string, target string, depth int, startChan, doneChan, fou
 		colly.AllowURLRevisit(),
 		// DELETE CACHE SETIAP KALI MAU SEARCH BARU,
 		// PENCEGAHAN RACE CONDITION & RAM MELEDAK
-		colly.CacheDir("./cache"),
+		// colly.CacheDir("./cache"),
 	)
 
 	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100, RandomDelay: 25 * time.Millisecond})
@@ -71,12 +71,12 @@ func crawlerDLS(start string, target string, depth int, startChan, doneChan, fou
 			!strings.Contains(link, "_talk:") &&
 			e.Request.AbsoluteURL(link) != e.Request.URL.String() &&
 			link != "/wiki/Main_Page" {
-			e.Request.Visit(link)
 			if !exists2 {
 				mutex.Lock()
 				path.Set(e.Request.AbsoluteURL(link), e.Request.URL.String())
 				mutex.Unlock()
 			}
+			e.Request.Visit(link)
 		}
 	})
 
@@ -97,7 +97,7 @@ func crawlerDLS(start string, target string, depth int, startChan, doneChan, fou
 }
 
 func crawlerIDS(start, target string) {
-	os.RemoveAll("./cache")
+	// os.RemoveAll("./cache")
 	startChan := make(chan bool)
 	doneChan := make(chan bool)
 	foundChan := make(chan bool, 1)
@@ -120,9 +120,22 @@ incrementLoop:
 		}
 	}
 	key := "https://en.wikipedia.org/wiki/" + target
+	expPath := []string{}
 	for key != "https://en.wikipedia.org/wiki/"+start {
-		fmt.Println("Key : ", key)
+		expPath = append(expPath, key)
 		value, _ := path.Get(key)
 		key = value.(string)
+	}
+
+	for i, j := 0, len(expPath)-1; i < j; i, j = i+1, j-1 {
+		expPath[i], expPath[j] = expPath[j], expPath[i]
+	}
+	expPath = expPath[1:]
+
+	jsonStr, err := json.Marshal(expPath)
+	if err != nil {
+		fmt.Printf("Error: %s", err.Error())
+	} else {
+		fmt.Println(string(jsonStr))
 	}
 }
