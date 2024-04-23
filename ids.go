@@ -17,7 +17,7 @@ func crawlerDLS(start string, target string, depth int, startChan, doneChan chan
 		colly.MaxDepth(depth),
 		colly.Async(true),
 		colly.AllowURLRevisit(),
-		// TODO : PLS IMPLEMENT DELETE CACHE SETIAP KALI MAU SEARCH BARU
+		// DELETE CACHE SETIAP KALI MAU SEARCH BARU,
 		// PENCEGAHAN RACE CONDITION & RAM MELEDAK
 		colly.CacheDir("./cache"),
 	)
