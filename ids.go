@@ -5,12 +5,18 @@ import (
 	"log"
 	"os"
 	"strings"
+	"sync"
+	"sync/atomic"
 	"time"
 
+	"github.com/elliotchance/orderedmap/v2"
 	"github.com/gocolly/colly/v2"
 )
 
-func crawlerDLS(start string, target string, depth int, startChan, doneChan chan bool) {
+func crawlerDLS(start string, target string, depth int, startChan, doneChan, found chan bool, path *orderedmap.OrderedMap[string, any]) {
+	var mutex sync.Mutex
+	var targetFound int32 = 0
+	// path := orderedmap.NewOrderedMap[string, any]()
 	// TODO : Simpan path, cek mencapai target or not
 	c := colly.NewCollector(
 		colly.AllowedDomains("en.wikipedia.org"),
@@ -22,7 +28,7 @@ func crawlerDLS(start string, target string, depth int, startChan, doneChan chan
 		colly.CacheDir("./cache"),
 	)
 
-	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 20, RandomDelay: 25 * time.Millisecond})
+	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100, RandomDelay: 25 * time.Millisecond})
 
 	c.OnRequest(func(r *colly.Request) {
 		// fmt.Println("Visiting", r.URL)
@@ -34,16 +40,23 @@ func crawlerDLS(start string, target string, depth int, startChan, doneChan chan
 
 	c.OnResponse(func(r *colly.Response) {
 		fmt.Println("Visited", r.Request.URL)
-		link := r.Request.URL.String()
-		if link == "/wiki/"+target {
-			return
-		}
 	})
 
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		// By Default, this is already Depth-Limited Search LMAOOOOO
 		// Sprinkle some async + increment the depth :D
+
 		link := e.Attr("href")
+		if link == "/wiki/"+target {
+			mutex.Lock()
+			path.Set(e.Request.AbsoluteURL(link), e.Request.URL.String())
+			atomic.StoreInt32(&targetFound, 1)
+			mutex.Unlock()
+			return
+		}
+		mutex.Lock()
+		_, exists2 := path.Get(e.Request.AbsoluteURL(link))
+		mutex.Unlock()
 		if strings.HasPrefix(link, "/wiki/") &&
 			!strings.Contains(link, "File:") &&
 			!strings.Contains(link, "Help:") &&
@@ -59,6 +72,11 @@ func crawlerDLS(start string, target string, depth int, startChan, doneChan chan
 			e.Request.AbsoluteURL(link) != e.Request.URL.String() &&
 			link != "/wiki/Main_Page" {
 			e.Request.Visit(link)
+			if !exists2 {
+				mutex.Lock()
+				path.Set(e.Request.AbsoluteURL(link), e.Request.URL.String())
+				mutex.Unlock()
+			}
 		}
 	})
 
@@ -70,17 +88,41 @@ func crawlerDLS(start string, target string, depth int, startChan, doneChan chan
 	c.Wait()
 	<-startChan
 	doneChan <- true
+	if atomic.LoadInt32(&targetFound) == 1 {
+		found <- true
+	} else {
+		found <- false
+	}
+	// found <- false
 }
 
 func crawlerIDS(start, target string) {
 	os.RemoveAll("./cache")
-	var notFound = true
 	startChan := make(chan bool)
 	doneChan := make(chan bool)
-	for i := 1; notFound; i++ {
+	foundChan := make(chan bool, 1)
+	path := orderedmap.NewOrderedMap[string, any]()
+
+incrementLoop:
+	for i := 1; ; i++ {
 		fmt.Println("DEPTH KE", i)
-		go crawlerDLS(start, target, i, startChan, doneChan)
+		go crawlerDLS(start, target, i, startChan, doneChan, foundChan, path)
 		startChan <- true
 		<-doneChan
+		var isFound bool
+		select {
+		case isFound = <-foundChan:
+		default:
+			isFound = false
+		}
+		if isFound {
+			break incrementLoop
+		}
+	}
+	key := "https://en.wikipedia.org/wiki/" + target
+	for key != "https://en.wikipedia.org/wiki/"+start {
+		fmt.Println("Key : ", key)
+		value, _ := path.Get(key)
+		key = value.(string)
 	}
 }
