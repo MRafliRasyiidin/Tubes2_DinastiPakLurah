@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"strings"
 	"time"
 
@@ -72,6 +73,7 @@ func crawlerDLS(start string, target string, depth int, startChan, doneChan chan
 }
 
 func crawlerIDS(start, target string) {
+	os.RemoveAll("./cache")
 	var notFound = true
 	startChan := make(chan bool)
 	doneChan := make(chan bool)
