@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/elliotchance/orderedmap/v2"
 	"github.com/gocolly/colly/v2"
@@ -30,10 +30,13 @@ func crawlerDLS(start string, target string, depth int, path *orderedmap.Ordered
 		colly.AllowedDomains("en.wikipedia.org"),
 		colly.MaxDepth(depth+1),
 		colly.AllowURLRevisit(),
+		colly.Async(true),
 		// DELETE CACHE SETIAP KALI MAU SEARCH BARU,
 		// PENCEGAHAN RACE CONDITION & RAM MELEDAK
-		colly.CacheDir("./cache"),
+		// colly.CacheDir("./cache"),
 	)
+
+	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100, RandomDelay: 25 * time.Millisecond})
 
 	c.OnRequest(func(r *colly.Request) {
 		// fmt.Println("Visiting", r.URL)
@@ -52,7 +55,7 @@ func crawlerDLS(start string, target string, depth int, path *orderedmap.Ordered
 		// Sprinkle some async + increment the depth :D
 		link := e.Attr("href")
 		if link == "/wiki/"+target {
-			fmt.Println("Found target link:", link)
+			fmt.Println("Found target link at depth", depth+1, ":", link)
 			path.Set(e.Request.AbsoluteURL(link), e.Request.URL.String())
 			inserter.done = true
 			inserter.found = true
@@ -85,13 +88,14 @@ func crawlerDLS(start string, target string, depth int, path *orderedmap.Ordered
 	})
 
 	c.Visit("https://en.wikipedia.org/wiki/" + start)
+	c.Wait()
 	inserter.found = false
 	inserter.done = true
 	controlChan <- inserter
 }
 
 func crawlerIDS(start, target string) {
-	os.RemoveAll("./cache")
+	// os.RemoveAll("./cache")
 	path := orderedmap.NewOrderedMap[string, any]()
 	i := 0
 incrementLoop:
