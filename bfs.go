@@ -5,6 +5,7 @@ import (
 	"log"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/elliotchance/orderedmap/v2"
@@ -22,12 +23,10 @@ func linkNotInside(linkEntry, linkTarget string, pathMap *safeorderedmap.SafeOrd
 	return true
 }
 
-func crawlerBFS(start string, target string) {
+func crawlerBFS(start string, target string, path *safeorderedmap.SafeOrderedMap[[]string], depth *int32) {
 	var mutex sync.Mutex
 	queue := orderedmap.NewOrderedMap[string, any]()
-	// path := orderedmap.NewOrderedMap[string, any]()
-	path := safeorderedmap.New[[]string]()
-	// path := orderedmap.NewOrderedMap[string, []string]()
+	// path := safeorderedmap.New[[]string]()
 	queueChild := orderedmap.NewOrderedMap[string, any]()
 	found := false
 
@@ -61,6 +60,7 @@ func crawlerBFS(start string, target string) {
 		pathInserter, _ := path.Get(h.Request.AbsoluteURL(link))
 		if link == "/wiki/"+target {
 			// path.Set(h.Request.AbsoluteURL(link), h.Request.URL.String())
+			fmt.Println("Found target link at depth", atomic.LoadInt32(depth)+1, ":", link)
 			if linkNotInside(h.Request.AbsoluteURL(link), h.Request.URL.String(), path) {
 				path.Add(h.Request.AbsoluteURL(link), append(pathInserter, h.Request.URL.String()))
 			}
@@ -86,7 +86,6 @@ func crawlerBFS(start string, target string) {
 			mutex.Lock()
 			queueChild.Set(h.Request.AbsoluteURL(link), true)
 			mutex.Unlock()
-			// fmt.Println(h.Request.AbsoluteURL(link))
 			if linkNotInside(h.Request.AbsoluteURL(link), h.Request.URL.String(), path) {
 				path.Add(h.Request.AbsoluteURL(link), append(pathInserter, h.Request.URL.String()))
 			}
@@ -98,10 +97,11 @@ func crawlerBFS(start string, target string) {
 		mutex.Lock()
 		queue.Delete(r.Request.URL.String())
 		if queue.Len() == 0 {
-			fmt.Println("Swap")
 			queue, queueChild = queueChild, queue
+			queueChild = orderedmap.NewOrderedMap[string, any]()
+			atomic.StoreInt32(depth, atomic.LoadInt32(depth)+1)
+			fmt.Println("Searching depth,", atomic.LoadInt32(depth))
 		}
-		// queueChild = orderedmap.NewOrderedMap[string, any]()
 		mutex.Unlock()
 	})
 
@@ -116,33 +116,8 @@ queueIteration:
 		mutex.Unlock()
 		if found {
 			time.Sleep(5 * time.Second)
+			c.AllowedDomains = []string{""}
 			break queueIteration
 		}
-
 	}
-	go c.Wait()
-
-	path.Each(func(key string, value []string) {
-		fmt.Println("Key", key)
-		fmt.Println("Val", value)
-	})
-	// key := "https://en.wikipedia.org/wiki/" + target
-	// expPath := []string{}
-	// for key != "https://en.wikipedia.org/wiki/"+start {
-	// 	fmt.Println("Key : ", key)
-	// 	expPath = append(expPath, key)
-	// 	value, _ := path.Get(key)
-	// 	key = value.(string)
-	// }
-
-	// for i, j := 0, len(expPath)-1; i < j; i, j = i+1, j-1 {
-	// 	expPath[i], expPath[j] = expPath[j], expPath[i]
-	// }
-
-	// jsonStr, err := json.Marshal(expPath)
-	// if err != nil {
-	// 	fmt.Printf("Error: %s", err.Error())
-	// } else {
-	// 	fmt.Println(string(jsonStr))
-	// }
 }
