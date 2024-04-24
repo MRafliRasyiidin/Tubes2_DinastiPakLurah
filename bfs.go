@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"strings"
@@ -10,12 +9,25 @@ import (
 
 	"github.com/elliotchance/orderedmap/v2"
 	"github.com/gocolly/colly/v2"
+	"github.com/thalesfsp/go-common-types/safeorderedmap"
 )
+
+func linkNotInside(linkEntry, linkTarget string, pathMap *safeorderedmap.SafeOrderedMap[[]string]) bool {
+	slicePath, _ := pathMap.Get(linkEntry)
+	for _, link := range slicePath {
+		if link == linkTarget {
+			return false
+		}
+	}
+	return true
+}
 
 func crawlerBFS(start string, target string) {
 	var mutex sync.Mutex
 	queue := orderedmap.NewOrderedMap[string, any]()
-	path := orderedmap.NewOrderedMap[string, any]()
+	// path := orderedmap.NewOrderedMap[string, any]()
+	path := safeorderedmap.New[[]string]()
+	// path := orderedmap.NewOrderedMap[string, []string]()
 	queueChild := orderedmap.NewOrderedMap[string, any]()
 	found := false
 
@@ -40,26 +52,22 @@ func crawlerBFS(start string, target string) {
 
 	c.OnResponse(func(r *colly.Response) {
 		// I need to track how many links are fully visited
-		fmt.Println("Visited", r.Request.URL)
+		fmt.Println("Visited", r.Request.URL.String())
 	})
 
 	c.OnHTML("a[href]", func(h *colly.HTMLElement) {
 		// time.Sleep(1 * time.Millisecond)
 		link := h.Attr("href")
+		pathInserter, _ := path.Get(h.Request.AbsoluteURL(link))
 		if link == "/wiki/"+target {
-			mutex.Lock()
-			path.Set(h.Request.AbsoluteURL(link), h.Request.URL.String())
-			mutex.Unlock()
+			// path.Set(h.Request.AbsoluteURL(link), h.Request.URL.String())
+			if linkNotInside(h.Request.AbsoluteURL(link), h.Request.URL.String(), path) {
+				path.Add(h.Request.AbsoluteURL(link), append(pathInserter, h.Request.URL.String()))
+			}
 			found = true
 			return
 		}
 		visited, _ := c.HasVisited(link)
-		mutex.Lock()
-		_, exists := queue.Get(h.Request.AbsoluteURL(link))
-		mutex.Unlock()
-		mutex.Lock()
-		_, exists2 := path.Get(h.Request.AbsoluteURL(link))
-		mutex.Unlock()
 		if strings.HasPrefix(link, "/wiki/") &&
 			!strings.Contains(link, "File:") &&
 			!strings.Contains(link, "Help:") &&
@@ -74,15 +82,13 @@ func crawlerBFS(start string, target string) {
 			!strings.Contains(link, "_talk:") &&
 			link != "/wiki/Main_Page" &&
 			h.Request.AbsoluteURL(link) != h.Request.URL.String() &&
-			!exists && !visited {
+			!visited {
 			mutex.Lock()
 			queueChild.Set(h.Request.AbsoluteURL(link), true)
 			mutex.Unlock()
 			// fmt.Println(h.Request.AbsoluteURL(link))
-			if !exists2 {
-				mutex.Lock()
-				path.Set(h.Request.AbsoluteURL(link), h.Request.URL.String())
-				mutex.Unlock()
+			if linkNotInside(h.Request.AbsoluteURL(link), h.Request.URL.String(), path) {
+				path.Add(h.Request.AbsoluteURL(link), append(pathInserter, h.Request.URL.String()))
 			}
 		}
 	})
@@ -106,29 +112,34 @@ queueIteration:
 		}
 		mutex.Unlock()
 		if found {
+			time.Sleep(5 * time.Second)
 			break queueIteration
 		}
 
 	}
 	go c.Wait()
 
-	key := "https://en.wikipedia.org/wiki/" + target
-	expPath := []string{}
-	for key != "https://en.wikipedia.org/wiki/"+start {
-		fmt.Println("Key : ", key)
-		expPath = append(expPath, key)
-		value, _ := path.Get(key)
-		key = value.(string)
-	}
+	path.Each(func(key string, value []string) {
+		fmt.Println("Key", key)
+		fmt.Println("Val", value)
+	})
+	// key := "https://en.wikipedia.org/wiki/" + target
+	// expPath := []string{}
+	// for key != "https://en.wikipedia.org/wiki/"+start {
+	// 	fmt.Println("Key : ", key)
+	// 	expPath = append(expPath, key)
+	// 	value, _ := path.Get(key)
+	// 	key = value.(string)
+	// }
 
-	for i, j := 0, len(expPath)-1; i < j; i, j = i+1, j-1 {
-		expPath[i], expPath[j] = expPath[j], expPath[i]
-	}
+	// for i, j := 0, len(expPath)-1; i < j; i, j = i+1, j-1 {
+	// 	expPath[i], expPath[j] = expPath[j], expPath[i]
+	// }
 
-	jsonStr, err := json.Marshal(expPath)
-	if err != nil {
-		fmt.Printf("Error: %s", err.Error())
-	} else {
-		fmt.Println(string(jsonStr))
-	}
+	// jsonStr, err := json.Marshal(expPath)
+	// if err != nil {
+	// 	fmt.Printf("Error: %s", err.Error())
+	// } else {
+	// 	fmt.Println(string(jsonStr))
+	// }
 }

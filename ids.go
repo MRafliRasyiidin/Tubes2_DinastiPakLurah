@@ -1,7 +1,7 @@
 package main
 
 import (
-	"encoding/json"
+	// "encoding/json"
 	"fmt"
 	"log"
 	"strings"
@@ -20,7 +20,7 @@ var (
 	controlChan = make(chan pairChan)
 )
 
-func crawlerDLS(start string, target string, depth int, path *safeorderedmap.SafeOrderedMap[string]) {
+func crawlerDLS(start string, target string, depth int, path *safeorderedmap.SafeOrderedMap[[]string]) {
 	// path := orderedmap.NewOrderedMap[string, any]()
 	// TODO : Simpan path, cek mencapai target or not
 	var inserter pairChan
@@ -52,12 +52,11 @@ func crawlerDLS(start string, target string, depth int, path *safeorderedmap.Saf
 		// By Default, this is already Depth-Limited Search LMAOOOOO
 		// Sprinkle some async + increment the depth :D
 		link := e.Attr("href")
-
-		// _, hasVisited := path.Get(e.Request.AbsoluteURL(link))
+		pathInserter, _ := path.Get(e.Request.AbsoluteURL(link))
 
 		if link == "/wiki/"+target {
 			fmt.Println("Found target link at depth", depth+1, ":", link)
-			path.Add(e.Request.AbsoluteURL(link), e.Request.URL.String())
+			path.Add(e.Request.AbsoluteURL(link), append(pathInserter, e.Request.URL.String()))
 			inserter.done = true
 			inserter.found = true
 			controlChan <- inserter
@@ -77,7 +76,7 @@ func crawlerDLS(start string, target string, depth int, path *safeorderedmap.Saf
 			!strings.Contains(link, "_talk:") &&
 			e.Request.AbsoluteURL(link) != e.Request.URL.String() &&
 			link != "/wiki/Main_Page" {
-			path.Add(e.Request.AbsoluteURL(link), e.Request.URL.String())
+			path.Add(e.Request.AbsoluteURL(link), append(pathInserter, e.Request.URL.String()))
 			e.Request.Visit(link)
 		}
 	})
@@ -96,15 +95,16 @@ func crawlerDLS(start string, target string, depth int, path *safeorderedmap.Saf
 func crawlerIDS(start, target string) {
 	// os.RemoveAll("./cache")
 	// path := orderedmap.NewOrderedMap[string, any]()
-	path := safeorderedmap.New[string]()
+	path := safeorderedmap.New[[]string]()
 	i := 0
-	j := 0
+	// j := 0
 incrementLoop:
 	for {
 		fmt.Println("Depth", i)
 		go crawlerDLS(start, target, i, path)
 		controlFlow := <-controlChan
 		if controlFlow.found && controlFlow.done {
+			time.Sleep(5 * time.Second)
 			break incrementLoop
 		}
 		if controlFlow.done && !controlFlow.found {
@@ -112,27 +112,24 @@ incrementLoop:
 		}
 	}
 
-	key := "https://en.wikipedia.org/wiki/" + target
-	expPath := []string{}
+	// key := "https://en.wikipedia.org/wiki/" + target
+	// expPath := []string{}
 
-	for key != "https://en.wikipedia.org/wiki/"+start && j <= i {
-		fmt.Println("Key : ", key)
-		expPath = append(expPath, key)
-		value, _ := path.Get(key)
-		key = value
-		j++
-	}
+	path.Each(func(key string, value []string) {
+		fmt.Println("Key", key)
+		fmt.Println("Val", value)
+	})
 
-	for i, j := 0, len(expPath)-1; i < j; i, j = i+1, j-1 {
-		expPath[i], expPath[j] = expPath[j], expPath[i]
-	}
+	// for i, j := 0, len(expPath)-1; i < j; i, j = i+1, j-1 {
+	// 	expPath[i], expPath[j] = expPath[j], expPath[i]
+	// }
 
-	jsonStr, err := json.Marshal(expPath)
-	if err != nil {
-		fmt.Printf("Error: %s", err.Error())
-	} else {
-		fmt.Println(string(jsonStr))
-	}
+	// jsonStr, err := json.Marshal(expPath)
+	// if err != nil {
+	// 	fmt.Printf("Error: %s", err.Error())
+	// } else {
+	// 	fmt.Println(string(jsonStr))
+	// }
 	// for iter := path.Front(); iter != path.Back(); iter = iter.Next() {
 	// 	fmt.Println(iter.Key, iter.Value)
 	// }
