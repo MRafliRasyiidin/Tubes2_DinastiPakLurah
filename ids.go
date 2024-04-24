@@ -5,11 +5,10 @@ import (
 	"fmt"
 	"log"
 	"strings"
-	"sync"
 	"time"
 
-	"github.com/elliotchance/orderedmap/v2"
 	"github.com/gocolly/colly/v2"
+	"github.com/thalesfsp/go-common-types/safeorderedmap"
 )
 
 type pairChan struct {
@@ -21,8 +20,7 @@ var (
 	controlChan = make(chan pairChan)
 )
 
-func crawlerDLS(start string, target string, depth int, path *orderedmap.OrderedMap[string, any]) {
-	var mutex sync.Mutex
+func crawlerDLS(start string, target string, depth int, path *safeorderedmap.SafeOrderedMap[string]) {
 	// path := orderedmap.NewOrderedMap[string, any]()
 	// TODO : Simpan path, cek mencapai target or not
 	var inserter pairChan
@@ -54,9 +52,12 @@ func crawlerDLS(start string, target string, depth int, path *orderedmap.Ordered
 		// By Default, this is already Depth-Limited Search LMAOOOOO
 		// Sprinkle some async + increment the depth :D
 		link := e.Attr("href")
+
+		// _, hasVisited := path.Get(e.Request.AbsoluteURL(link))
+
 		if link == "/wiki/"+target {
 			fmt.Println("Found target link at depth", depth+1, ":", link)
-			path.Set(e.Request.AbsoluteURL(link), e.Request.URL.String())
+			path.Add(e.Request.AbsoluteURL(link), e.Request.URL.String())
 			inserter.done = true
 			inserter.found = true
 			controlChan <- inserter
@@ -76,9 +77,7 @@ func crawlerDLS(start string, target string, depth int, path *orderedmap.Ordered
 			!strings.Contains(link, "_talk:") &&
 			e.Request.AbsoluteURL(link) != e.Request.URL.String() &&
 			link != "/wiki/Main_Page" {
-			mutex.Lock()
-			path.Set(e.Request.AbsoluteURL(link), e.Request.URL.String())
-			mutex.Unlock()
+			path.Add(e.Request.AbsoluteURL(link), e.Request.URL.String())
 			e.Request.Visit(link)
 		}
 	})
@@ -96,8 +95,10 @@ func crawlerDLS(start string, target string, depth int, path *orderedmap.Ordered
 
 func crawlerIDS(start, target string) {
 	// os.RemoveAll("./cache")
-	path := orderedmap.NewOrderedMap[string, any]()
+	// path := orderedmap.NewOrderedMap[string, any]()
+	path := safeorderedmap.New[string]()
 	i := 0
+	j := 0
 incrementLoop:
 	for {
 		fmt.Println("Depth", i)
@@ -113,11 +114,13 @@ incrementLoop:
 
 	key := "https://en.wikipedia.org/wiki/" + target
 	expPath := []string{}
-	for key != "https://en.wikipedia.org/wiki/"+start {
+
+	for key != "https://en.wikipedia.org/wiki/"+start && j <= i {
 		fmt.Println("Key : ", key)
 		expPath = append(expPath, key)
 		value, _ := path.Get(key)
-		key = value.(string)
+		key = value
+		j++
 	}
 
 	for i, j := 0, len(expPath)-1; i < j; i, j = i+1, j-1 {

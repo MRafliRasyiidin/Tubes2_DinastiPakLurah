@@ -38,6 +38,6 @@ import (
 
 func main() {
 	start := time.Now()
-	crawlerIDS("Medan_Prijaji", "Indonesia")
+	crawlerIDS("Medan_Prijaji", "Hitler")
 	fmt.Println(time.Since(start))
 }
