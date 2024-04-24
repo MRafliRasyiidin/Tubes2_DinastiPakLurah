@@ -97,8 +97,11 @@ func crawlerBFS(start string, target string) {
 		// fmt.Println("Finished", r.Request.URL)
 		mutex.Lock()
 		queue.Delete(r.Request.URL.String())
-		queue, queueChild = queueChild, queue
-		queueChild = orderedmap.NewOrderedMap[string, any]()
+		if queue.Len() == 0 {
+			fmt.Println("Swap")
+			queue, queueChild = queueChild, queue
+		}
+		// queueChild = orderedmap.NewOrderedMap[string, any]()
 		mutex.Unlock()
 	})
 
