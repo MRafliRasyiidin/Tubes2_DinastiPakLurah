@@ -12,6 +12,7 @@ function NodeGraph({ darkmode, start, target }) {
     };
 
     const fetchNodeList = (start, target) => {
+    //template 
       const nodeList = ['Node 1', 'Node 2', 'Node 3', 'Node 4', 'Node 5'];
 
       nodeList.push(target);
@@ -21,23 +22,25 @@ function NodeGraph({ darkmode, start, target }) {
     };
 
     const generateGraph = (nodes) => {
-      const graphData = {
+      var graphData = {
         nodes: [],
         edges: []
       };
 
+
       for (let i = 0; i < nodes.length; i++) {
         graphData.nodes.push({
-          id: `${uuidv4()}`, // Change node ID to string
-          label: `link${i}`,
-          title: nodes[i]
+          id: `${uuidv4()}`,
+          label: nodes[i],
+          title: nodes[i],
         });
 
         if (i < nodes.length - 1) {
           graphData.edges.push({
-            from: `${i}`, // Change from ID to string
-            to: `${i + 1}`, // Change to ID to string
-            id: `${uuidv4()}` // Change edge ID to string
+            from: `${i}`, 
+            to: `${i + 1}`, 
+            id: `${uuidv4()}`,
+            color: '#848484',
           });
         }
       }
@@ -49,22 +52,41 @@ function NodeGraph({ darkmode, start, target }) {
     }
   }, [start, target]);
 
+  var options = {
+    height: "700px",
+    layout: {
+      hierarchical: false
+    },
+    edges: {
+        color: {
+            color: '#b32e2e', 
+            highlight: '#b32e2e', 
+            hover: '#b32e2e',
+            opacity: 1, 
+            inherit: false, 
+        },
+        width: 2,
+        dashes: true,
+      },
+    };
+    
   const events = {
     select: function (event) {
       var { nodes, edges } = event;
-      console.log(edges);
       console.log(nodes);
+      console.log(edges);
     }
   };
 
-  console.log(graph)
+  console.log(graph)  
   return (
     <div>
       <div style={{ width: '100vh', height: '75vh' }} className="flex items-center align-middle justify-center border border-red-500 mt-40 mb-10">
         <Graph
+          key={uuidv4()}
+          options= {options}
           graph={graph}
           events={events}
-          options={{ layout: { hierarchical: false }, physics: false }}
         />
       </div>
     </div>
