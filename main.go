@@ -81,11 +81,11 @@ func main() {
 	start := time.Now()
 	path := safeorderedmap.New[[]string]()
 	linkStart := "Medan_Prijaji"
-	linkTarget := "Hitler"
+	linkTarget := "Adolf_Hitler"
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		crawlerBFS(linkStart, linkTarget, path, &depth)
+		crawlerBFS(linkStart, linkTarget, path, &depth, start)
 		// crawlerIDS(linkStart, linkTarget, path, &depth)
 	}()
 	wg.Wait()
@@ -96,5 +96,5 @@ func main() {
 			fmt.Println(res)
 		}
 	}
-	fmt.Println("Runtime:", time.Since(start), paths[0])
+	fmt.Println("Runtime:", time.Since(start))
 }
