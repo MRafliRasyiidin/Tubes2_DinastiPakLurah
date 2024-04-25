@@ -23,12 +23,13 @@ func linkNotInside(linkEntry, linkTarget string, pathMap *safeorderedmap.SafeOrd
 	return true
 }
 
-func crawlerBFS(start string, target string, path *safeorderedmap.SafeOrderedMap[[]string], depth *int32) {
+func crawlerBFS(start string, target string, path *safeorderedmap.SafeOrderedMap[[]string], depth *int32, timer time.Time) {
 	var mutex sync.Mutex
 	queue := orderedmap.NewOrderedMap[string, any]()
+	visits := safeorderedmap.New[bool]()
 	// path := safeorderedmap.New[[]string]()
 	queueChild := orderedmap.NewOrderedMap[string, any]()
-	found := false
+	var found int32
 
 	c := colly.NewCollector(
 		colly.AllowedDomains("en.wikipedia.org"),
@@ -44,13 +45,24 @@ func crawlerBFS(start string, target string, path *safeorderedmap.SafeOrderedMap
 		// fmt.Println("Visiting", r.URL)
 	})
 
-	c.OnError(func(_ *colly.Response, err error) {
+	c.OnError(func(r *colly.Response, err error) {
+		// Pas error queuenya juga dihapus biar ngga ngeblock
 		log.Println("Something went wrong:", err)
+		mutex.Lock()
+		fmt.Println("SISA", queue.Len())
+		queue.Delete(r.Request.URL.String())
+		if queue.Len() == 0 && atomic.LoadInt32(&found) != 1 {
+			queue, queueChild = queueChild, queue
+			queueChild = orderedmap.NewOrderedMap[string, any]()
+			atomic.StoreInt32(depth, atomic.LoadInt32(depth)+1)
+			fmt.Println("Searching at depth:", atomic.LoadInt32(depth))
+		}
+		mutex.Unlock()
 	})
 
 	c.OnResponse(func(r *colly.Response) {
 		// I need to track how many links are fully visited
-		fmt.Println("Visited", r.Request.URL.String())
+		// fmt.Println("Visited", r.Request.URL.String())
 	})
 
 	c.OnHTML("a[href]", func(h *colly.HTMLElement) {
@@ -63,10 +75,9 @@ func crawlerBFS(start string, target string, path *safeorderedmap.SafeOrderedMap
 			if linkNotInside(h.Request.AbsoluteURL(link), h.Request.URL.String(), path) {
 				path.Add(h.Request.AbsoluteURL(link), append(pathInserter, h.Request.URL.String()))
 			}
-			found = true
+			atomic.StoreInt32(&found, atomic.LoadInt32(&found)+1)
 			return
 		}
-		visited, _ := c.HasVisited(link)
 		if strings.HasPrefix(link, "/wiki/") &&
 			!strings.Contains(link, "File:") &&
 			!strings.Contains(link, "Help:") &&
@@ -80,10 +91,12 @@ func crawlerBFS(start string, target string, path *safeorderedmap.SafeOrderedMap
 			!strings.Contains(link, "User:") &&
 			!strings.Contains(link, "_talk:") &&
 			link != "/wiki/Main_Page" &&
-			h.Request.AbsoluteURL(link) != h.Request.URL.String() &&
-			!visited {
+			h.Request.AbsoluteURL(link) != h.Request.URL.String() {
 			mutex.Lock()
-			queueChild.Set(h.Request.AbsoluteURL(link), true)
+			visited, _ := visits.Get(h.Request.AbsoluteURL(link))
+			if !visited {
+				queueChild.Set(h.Request.AbsoluteURL(link), true)
+			}
 			mutex.Unlock()
 			if linkNotInside(h.Request.AbsoluteURL(link), h.Request.URL.String(), path) {
 				path.Add(h.Request.AbsoluteURL(link), append(pathInserter, h.Request.URL.String()))
@@ -94,8 +107,9 @@ func crawlerBFS(start string, target string, path *safeorderedmap.SafeOrderedMap
 	c.OnScraped(func(r *colly.Response) {
 		// fmt.Println("Finished", r.Request.URL)
 		mutex.Lock()
+		fmt.Println("SISA", queue.Len())
 		queue.Delete(r.Request.URL.String())
-		if queue.Len() == 0 {
+		if queue.Len() == 0 && atomic.LoadInt32(&found) != 1 {
 			queue, queueChild = queueChild, queue
 			queueChild = orderedmap.NewOrderedMap[string, any]()
 			atomic.StoreInt32(depth, atomic.LoadInt32(depth)+1)
@@ -110,11 +124,11 @@ queueIteration:
 	for {
 		mutex.Lock()
 		for el := queue.Front(); el != nil; el = el.Next() {
+			visits.Add(el.Key, true)
 			c.Visit(el.Key)
 		}
 		mutex.Unlock()
-		if found {
-			time.Sleep(5 * time.Second)
+		if queue.Len() == 0 || atomic.LoadInt32(&found) >= 1 && time.Since(timer) >= 58*time.Second {
 			c.AllowedDomains = []string{""}
 			break queueIteration
 		}
