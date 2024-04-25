@@ -35,8 +35,9 @@ function AutoCompleteInput({ label, placeholder, listID }) {
     return (
         <form className="flex flex-col gap-4">
             <div className="flex items-center">
-                <label className="w-24">{label}</label>
+                <label className="">{label}</label>
                 <input
+                    className = "bg-gray-400 hover:bg-gray-700 w-48 h-10 rounded-xl w-30 placeholder-white"
                     type="text"
                     value={searchTerm}
                     onChange={handleChange}
