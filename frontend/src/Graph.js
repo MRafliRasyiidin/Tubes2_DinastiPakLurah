@@ -62,7 +62,7 @@ function NodeGraph({ darkmode, start, target }) {
         inherit: false,
       },
       width: 2,
-      dashes: true,
+      dashes: false,
     },
     height: '700px',
     layout: {
@@ -80,7 +80,7 @@ function NodeGraph({ darkmode, start, target }) {
 
   return (
     <div>
-      <div style={{ width: '100vh', height: '75vh' }} className="flex items-center align-middle justify-center border border-red-500 mt-40 mb-10">
+      <div style={{ width: '175vh', height: '100vh' }} className="flex items-center align-middle justify-center border  bg-slate-300 rounded-xl  mt-40 mb-10">
         <Graph
           key={uuidv4()}
           options={options}
