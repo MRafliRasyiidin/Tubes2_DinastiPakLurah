@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Graph from 'react-vis-network-graph';
 import { v4 as uuidv4 } from 'uuid';
 
-function NodeGraph({ darkmode, start, target }) {
+function NodeGraph({ darkmode, start, target}) {
   const [graph, setGraph] = useState({ nodes: [], edges: [] });
 
   useEffect(() => {
@@ -82,17 +82,11 @@ function NodeGraph({ darkmode, start, target }) {
       dashes: false,
     },
     height: '700px',
-    smooth: {
-      type: 'continuous' // Set the type of edge smoothing
-    },
     layout: {
       hierarchical: false,
-      randomSeed: 1, 
-      improvedLayout: true, 
-      avoidOverlap: true, 
+      improvedLayout: true,
     },
     physics: true, 
-    // distance: 150,
 
   };
 
