@@ -11,14 +11,14 @@ function App() {
   const logo = darkmode? darkLogo: lightLogo;
 
   return (
-    <div class= {`flex flex-col items-center justify-center h-max ${darkmode ? 'bg-black' : 'bg-white'}`}>
+    <div class= {`flex flex-col items-center justify-center h-max w-auto ${darkmode ? 'bg-black' : 'bg-white'}`}>
       <img class = "w-auto h-96 top-20" src={logo} alt="Description of the image" />
       <div class = "text-center mb-10">
         <h1 class ={`font-sans font-bold text-xl ${darkmode ? 'text-white' : 'text-black'}`}>
           Made By DinastiPakLurah 
         </h1>
         <h2 class = {`${darkmode? 'text-white' : 'text-black'}`} >
-          made with happy(tears) and joy(pain)
+          made with Happy(Tears) and Joy(Pain)
         </h2>
       </div>
       {/* <div class = "flex flex-row items-center justify-center gap-4 ">
