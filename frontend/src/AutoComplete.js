@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function AutoCompleteInput({ label, placeholder, listID }) {
+function AutoCompleteInput({ label, placeholder, listID}) {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
 
