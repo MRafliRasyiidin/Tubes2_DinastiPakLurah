@@ -36,7 +36,6 @@ func crawlerBFS(start string, target string, path *safeorderedmap.SafeOrderedMap
 		// RAMKU MELEDAK KALAU BFS PAKE CACHE
 		// colly.CacheDir("./cache"),
 	)
-	c.AllowURLRevisit = false
 
 	// Wtf is even Parallelism: 1000?? Me brainrot big number equals good
 	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100, RandomDelay: 25 * time.Millisecond})
@@ -100,7 +99,7 @@ func crawlerBFS(start string, target string, path *safeorderedmap.SafeOrderedMap
 			queue, queueChild = queueChild, queue
 			queueChild = orderedmap.NewOrderedMap[string, any]()
 			atomic.StoreInt32(depth, atomic.LoadInt32(depth)+1)
-			fmt.Println("Searching depth,", atomic.LoadInt32(depth))
+			fmt.Println("Searching at depth:", atomic.LoadInt32(depth))
 		}
 		mutex.Unlock()
 	})
