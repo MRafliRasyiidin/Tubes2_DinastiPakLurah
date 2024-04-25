@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"sync/atomic"
 	"time"
 
 	"github.com/gocolly/colly/v2"
@@ -21,8 +22,6 @@ var (
 )
 
 func crawlerDLS(start string, target string, depth int, path *safeorderedmap.SafeOrderedMap[[]string]) {
-	// path := orderedmap.NewOrderedMap[string, any]()
-	// TODO : Simpan path, cek mencapai target or not
 	var inserter pairChan
 	c := colly.NewCollector(
 		colly.AllowedDomains("en.wikipedia.org"),
@@ -92,15 +91,12 @@ func crawlerDLS(start string, target string, depth int, path *safeorderedmap.Saf
 	controlChan <- inserter
 }
 
-func crawlerIDS(start, target string) {
+func crawlerIDS(start, target string, path *safeorderedmap.SafeOrderedMap[[]string], depth *int32) {
 	// os.RemoveAll("./cache")
-	// path := orderedmap.NewOrderedMap[string, any]()
-	path := safeorderedmap.New[[]string]()
 	i := 0
-	// j := 0
 incrementLoop:
 	for {
-		fmt.Println("Depth", i)
+		fmt.Println("Searching at depth:", i)
 		go crawlerDLS(start, target, i, path)
 		controlFlow := <-controlChan
 		if controlFlow.found && controlFlow.done {
@@ -109,30 +105,7 @@ incrementLoop:
 		}
 		if controlFlow.done && !controlFlow.found {
 			i++
+			atomic.StoreInt32(depth, int32(i))
 		}
 	}
-
-	// key := "https://en.wikipedia.org/wiki/" + target
-	// expPath := []string{}
-
-	path.Each(func(key string, value []string) {
-		fmt.Println("Key", key)
-		fmt.Println("Val", value)
-	})
-
-	// for i, j := 0, len(expPath)-1; i < j; i, j = i+1, j-1 {
-	// 	expPath[i], expPath[j] = expPath[j], expPath[i]
-	// }
-
-	// jsonStr, err := json.Marshal(expPath)
-	// if err != nil {
-	// 	fmt.Printf("Error: %s", err.Error())
-	// } else {
-	// 	fmt.Println(string(jsonStr))
-	// }
-	// for iter := path.Front(); iter != path.Back(); iter = iter.Next() {
-	// 	fmt.Println(iter.Key, iter.Value)
-	// }
-	// key := "https://en.wikipedia.org/wiki/" + target
-	// fmt.Println(path.Get(key))
 }
