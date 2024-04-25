@@ -11,7 +11,7 @@ function App() {
   const logo = darkmode? darkLogo: lightLogo;
 
   return (
-    <div class= {`flex flex-col items-center justify-center h-screen ${darkmode ? 'bg-black' : 'bg-white'}`}>
+    <div class= {`flex flex-col items-center justify-center h-max ${darkmode ? 'bg-black' : 'bg-white'}`}>
       <img class = "w-auto h-96 top-20" src={logo} alt="Description of the image" />
       <div class = "text-center mb-10">
         <h1 class ={`font-sans font-bold text-xl ${darkmode ? 'text-white' : 'text-black'}`}>

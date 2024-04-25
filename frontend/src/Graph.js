@@ -1,54 +1,72 @@
 import React, { useState, useEffect } from 'react';
-import Graph from 'react-graph-vis';
+import Graph from 'react-vis-network-graph';
+import { v4 as uuidv4 } from 'uuid';
 
 function NodeGraph({ darkmode, start, target }) {
   const [graph, setGraph] = useState({ nodes: [], edges: [] });
 
-//   console.log(start); 
-//   console.log(target);
-  const handleSearch = () => {
-    // Logic to fetch node list from start to target
-    const nodes = fetchNodeList(start, target);
-    generateGraph(nodes);
-  };
-
   useEffect(() => {
+    const handleSearch = () => {
+      const nodes = fetchNodeList(start, target);
+      generateGraph(nodes);
+    };
+
+    const fetchNodeList = (start, target) => {
+      const nodeList = ['Node 1', 'Node 2', 'Node 3', 'Node 4', 'Node 5'];
+
+      nodeList.push(target);
+      nodeList.unshift(start);
+
+      return nodeList;
+    };
+
+    const generateGraph = (nodes) => {
+      const graphData = {
+        nodes: [],
+        edges: []
+      };
+
+      for (let i = 0; i < nodes.length; i++) {
+        graphData.nodes.push({
+          id: `${uuidv4()}`, // Change node ID to string
+          label: `link${i}`,
+          title: nodes[i]
+        });
+
+        if (i < nodes.length - 1) {
+          graphData.edges.push({
+            from: `${i}`, // Change from ID to string
+            to: `${i + 1}`, // Change to ID to string
+            id: `${uuidv4()}` // Change edge ID to string
+          });
+        }
+      }
+      setGraph(graphData);
+    };
+
     if (start && target) {
       handleSearch();
     }
   }, [start, target]);
 
-  const fetchNodeList = (start, target) => {
-    // Example node list, replace this with your actual data fetching logic
-    const nodeList = ['Node 1', 'Node 2', 'Node 3', 'Node 4', 'Node 5'];
-    const startIndex = nodeList.indexOf(start);
-    const targetIndex = nodeList.indexOf(target);
-
-    if (startIndex === -1 || targetIndex === -1 || startIndex >= targetIndex) {
-      return [];
+  const events = {
+    select: function (event) {
+      var { nodes, edges } = event;
+      console.log(edges);
+      console.log(nodes);
     }
-
-    return nodeList.slice(startIndex, targetIndex + 1);
   };
 
-  const generateGraph = (nodes) => {
-    const graphData = {
-      nodes: nodes.map((node, index) => ({ id: index, label: node })),
-      edges: nodes.slice(0, -1).map((_, index) => ({ from: index, to: index + 1 })),
-    };
-    setGraph(graphData);
-  };
-
+  console.log(graph)
   return (
     <div>
-      {start && target && (
-        <div style={{ width: '80%', height: '400px' }}>
-          <Graph
-            graph={graph}
-            options={{ layout: { hierarchical: false }, physics: false }}
-          />
-        </div>
-      )}
+      <div style={{ width: '100vh', height: '75vh' }} className="flex items-center align-middle justify-center border border-red-500 mt-40 mb-10">
+        <Graph
+          graph={graph}
+          events={events}
+          options={{ layout: { hierarchical: false }, physics: false }}
+        />
+      </div>
     </div>
   );
 }

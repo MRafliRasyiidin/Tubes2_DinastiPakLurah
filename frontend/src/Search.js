@@ -15,13 +15,17 @@ function Search({ darkmode }) {
     setTarget(value);
   };
 
-  useEffect(() => {
-    console.log(start);
-  }, [start]);
+//   useEffect(() => {
+//     console.log(start);
+//   }, [start]);
 
-  useEffect(() => {
-    console.log(target);
-  }, [target]);
+//   useEffect(() => {
+//     console.log(target);
+//   }, [target]);
+
+useEffect(() => {
+    console.log(showGraph);
+  }, [showGraph]);
 
   const handleSearch = () => {
     setShowGraph(true);
@@ -30,18 +34,28 @@ function Search({ darkmode }) {
   return (
     <div>
       <div className="flex flex-row items-center justify-center gap-4 ">
-        <AutoCompleteInput placeholder="Start" listID="StartSuggestion" onChange={(value) => handleStartChange(value)} />
+        <AutoCompleteInput
+          placeholder="Start"
+          listID="StartSuggestion"
+          onChange={(value) => handleStartChange(value)}
+          setStart={setStart} 
+        />
         <div>
           <h1 className={`${darkmode ? 'text-white' : 'text-black'}`}>
             to
           </h1>
         </div>
-        <AutoCompleteInput placeholder="Target" listID="TargetSuggestion" onChange={(value) => handleTargetChange(value)} />
+        <AutoCompleteInput
+          placeholder="Target"
+          listID="TargetSuggestion"
+          onChange={(value) => handleTargetChange(value)}
+          setTarget={setTarget} 
+        />
       </div>
       <div className="flex justify-center items-center mt-4">
         <button id="submitButton" type="submit" onClick={handleSearch} className="bg-gray-400 hover:bg-gray-800 text-white font-bold py-2 px-5 rounded-xl">Search</button>
       </div>
-      {showGraph && start && target && <NodeGraph darkmode={darkmode} start={start} target={target} />}
+      {showGraph && start && target ? <NodeGraph darkmode={darkmode} start={start} target={target}/>: null}
     </div>
   );
 }
