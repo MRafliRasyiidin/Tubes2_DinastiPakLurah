@@ -11,46 +11,14 @@ import (
 type Data struct {
     Start string `json:"startLink"`
     Target string `json:"TargetLink"`
+    Method string `json:"searchType"`
 }
-
-type Method struct {
-    SearchType string `json:"searchType"`
-}
-
-var searchMethod string
 
 func main() {
     //http.HandleFunc("/", searchHandler)
     http.HandleFunc("/search", searchHandler)
-    http.HandleFunc("/type", methodHandler)
-    fmt.Println("azz2")
-    fmt.Println(searchMethod)
     log.Println("Server is running on http://localhost:3000")
     http.ListenAndServe(":3000", nil)
-}
-
-func methodHandler(w http.ResponseWriter, r *http.Request) {
-    err := r.ParseForm()
-    if err != nil {
-        http.Error(w, "Error parsing form data", http.StatusInternalServerError)
-        return
-    }
-
-    body, err := io.ReadAll(r.Body)
-        if err != nil {
-            http.Error(w, "Failed to read request body", http.StatusInternalServerError)
-            return
-        }
-
-    // Get form values
-    var methodData Method
-        if err := json.Unmarshal(body, &methodData); err != nil {
-            http.Error(w, "Failed to unmarshal request body", http.StatusBadRequest)
-            return
-        }
-    fmt.Println("azz")
-    searchMethod = methodData.SearchType
-    fmt.Println(searchMethod)
 }
 
 func searchHandler(w http.ResponseWriter, r *http.Request) {
@@ -76,6 +44,7 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 
     startWord := data.Start
     targetWord := data.Target
+    searchMethod := data.Method
 
     // Do something with the form data
     log.Printf("Received form data: Start Word = %s, Target Word = %s\n", startWord, targetWord)
@@ -87,6 +56,11 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func runWikiRace(start string, target string, searchType string) {
+    if searchType == "IDS" {
+        
+    } else {
+
+    }
     fmt.Println(searchType)
     fmt.Println(start, target)
     //algorithm(start, target)

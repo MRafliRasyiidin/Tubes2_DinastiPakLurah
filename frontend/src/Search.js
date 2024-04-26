@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import AutoCompleteInput from './components/AutoComplete.js';
 import NodeGraph from './Graph.js';
 
-function sendData(start, target) {
+function sendData(start, target, searchAlgo) {
   var data = {
     startLink: start,
-    targetLink: target
+    targetLink: target,
+    searchType: searchAlgo
   }
 
   fetch('/search', {
@@ -27,7 +28,7 @@ function sendData(start, target) {
   });
 }
 
-function Search({ darkmode }) {
+function Search({ darkmode, searchAlgorithm }) {
   const [start, setStart] = useState('');
   const [target, setTarget] = useState('');
   const [showGraph, setShowGraph] = useState(false);
@@ -59,8 +60,10 @@ useEffect(() =>{
 }, [start, target]);
 
   const handleSearch = () => {
-    sendData(start, target);
-    setShowGraph(true);
+      if (start.length !== 0 && target.length !== 0) {
+        sendData(start, target, searchAlgorithm);
+        setShowGraph(true);
+      }
   };
 
   return (
