@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactSwitch from 'react-switch';
 
-function ToggleSwitch({checked, onChange, leftInfo, rightInfo, info}) {
+function ToggleSwitch({checked, onChange, leftInfo, rightInfo, info, scolor = "#2E51A2",color="#D1D5DB" }) {
   return (
     <div className="mb-4">
         <p className = "text-center">{info}</p>
@@ -10,8 +10,8 @@ function ToggleSwitch({checked, onChange, leftInfo, rightInfo, info}) {
             <ReactSwitch
                 checked={checked}
                 onChange={onChange}
-                onColor="#2E51A2"
-                offColor="#D1D5DB"
+                onColor= {scolor}
+                offColor= {color} 
                 checkedIcon={false}
                 uncheckedIcon={false}
             />

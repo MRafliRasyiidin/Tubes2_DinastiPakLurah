@@ -40,6 +40,8 @@ function App() {
             onChange={toggleAll}
             leftInfo={'Yes'}
             rightInfo={'No'}
+            color={"#2E51A2"}
+            scolor={"#D1D5DB"}
             info={'Search all'}
           />
           <ToggleSwitch
@@ -48,6 +50,7 @@ function App() {
             leftInfo={'IDS'}
             rightInfo={'BFS'}
             info={'Algorithm'}
+            color={"#2E51A2"}
           />
         </div>
 
