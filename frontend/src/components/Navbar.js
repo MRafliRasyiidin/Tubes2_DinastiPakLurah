@@ -14,10 +14,10 @@ function Navbar({ darkmode }) {
         </li>
         <li className="mx-4">
           <IconMe 
-            className = "text-white"
             url = {"https://github.com/MRafliRasyiidin/Tubes2_DinastiPakLurah"} 
             description={"Github"} 
-            icon={faGithub}/>
+            icon={faGithub}
+            textColor={"text-white"}/>
         </li>
       </ul>
     </nav>

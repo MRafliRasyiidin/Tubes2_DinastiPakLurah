@@ -35,7 +35,7 @@ function About() {
         {/* Container for the three boxes */}
         <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
           {/* First box */}
-          <div className="flex flex-col items-center bg-gray-200 p-4 rounded-md w-4/5 mx-auto">
+          <div className="flex flex-col items-center bg-gray-200 p-4 rounded-md w-4/5 mx-auto hover:bg-gray-500">
             <h2 className="text-lg font-semibold">Muhamad Rafli Rasyidin</h2>
             <RoundedImage imageUrl={imagePath[0]} altText="Profile Image 1" />
             <p className="mt-2 text-center"> Rafli, masuk IF, tapi masih bisa turu, hebat bukan?
@@ -50,7 +50,7 @@ function About() {
           </div>
 
           {/* Second box */}
-          <div className="flex flex-col items-center  bg-gray-200 p-4 rounded-md w-4/5 mx-auto">
+          <div className="flex flex-col items-center  bg-gray-200 p-4 rounded-md w-4/5 mx-auto hover:bg-gray-500">
             <h2 className="text-lg font-semibold">M. Hanief Fatkhan Nashrullah</h2>
             <RoundedImage imageUrl={imagePath[2]} altText="Profile Image 2" />
             <p className="mt-2 text-center">Biasa dipanggil Hanief, orangnya oke
@@ -65,7 +65,7 @@ function About() {
           </div>
 
           {/* Third box */}
-          <div className="flex flex-col items-center bg-gray-200 p-4 rounded-md w-4/5 mx-auto">
+          <div className="flex flex-col items-center bg-gray-200 p-4 rounded-md w-4/5 mx-auto hover:bg-gray-500">
             <h2 className="text-lg font-semibold">Indraswara Galih Jayanegara</h2>
             <RoundedImage imageUrl={imagePath[1]} altText="Profile Image 3" />
             <p className="mt-2 text-center">Foto ini diambil pada saat website ini dibuat, bahagia bukan?
