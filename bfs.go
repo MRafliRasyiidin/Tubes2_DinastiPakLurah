@@ -125,7 +125,7 @@ queueIteration:
 			c.Visit(el.Key)
 		}
 		mutex.Unlock()
-		if queue.Len() == 0 || (atomic.LoadInt32(&found) >= 1 && time.Since(*timer) > 3*time.Second && !searchAll) {
+		if queue.Len() == 0 || (atomic.LoadInt32(&found) >= 1 && time.Since(*timer) > 3*time.Second && !searchAll) || atomic.LoadInt32(depth) > 9 {
 			c.AllowedDomains = []string{""}
 			break queueIteration
 		}
