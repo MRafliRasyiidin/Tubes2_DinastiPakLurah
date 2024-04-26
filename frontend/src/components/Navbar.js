@@ -9,7 +9,7 @@ function Navbar({ darkmode }) {
           <Link to="/" className="text-white hover:scale-110 transition-transform duration-300">Home</Link>
         </li>
         <li className="mx-4">
-          <Link to="/about" target="_blank" className="text-white hover:text-gray-300">About</Link>
+          <Link to="/about" className="text-white hover:text-gray-300">About</Link>
         </li>
         <li className="mx-4">
           <a href="https://github.com/MRafliRasyiidin/Tubes2_DinastiPakLurah" target="_blank" rel="noopener noreferrer" className="text-white hover:text-gray-300">Github</a>
