@@ -15,7 +15,7 @@ function App() {
 
   const toggleAlgorithm = () => {
     setSearchAlgorithm(searchAlgorithm === 'BFS' ? 'IDS' : 'BFS');
-    console.log(searchAlgorithm);
+    // console.log(searchAlgorithm);
   };
 
   const toggleAll = () =>{
@@ -46,7 +46,7 @@ function App() {
             info={'Search all'}
           />
           <ToggleSwitch
-            checked={searchAlgorithm === 'IDS'}
+            checked={searchAlgorithm === 'BFS'}
             onChange={toggleAlgorithm}
             leftInfo={'IDS'}
             rightInfo={'BFS'}
