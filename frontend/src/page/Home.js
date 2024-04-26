@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar';
 import lightLogo from "../Logo/logo-light.png";
 import darkLogo from "../Logo/logo-dark.png";
 import ToggleSwitch from "../components/ToggleSwitch";
+import ParticleApp from "../components/Background";
 
 function App() {
   const [searchAlgorithm, setSearchAlgorithm] = useState('BFS');
@@ -58,6 +59,7 @@ function App() {
           searchAlgorithm={searchAlgorithm}
         />
         <button onClick={() => setDarkMode(!darkmode)} className={`rounded-lg fixed top-4 right-4 ${darkmode ? 'bg-white hover:bg-gray-600' : 'bg-gray-300 hover:bg-gray-700 hover:text-white'}`}>Dark Mode</button>
+        <ParticleApp/>
       </div>
   );
 }
