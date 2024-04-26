@@ -118,7 +118,7 @@ func BFS(start string, target string, path *safeorderedmap.SafeOrderedMap[[]stri
 		mutex.Lock()
 		atomic.AddInt32(visitCount, 1)
 		queue.Delete(r.Request.URL.String())
-		fmt.Println(queue.Size())
+		// fmt.Println(queue.Size())
 		if queue.Size() == 0 {
 			inserter.empty = true
 		} else {
