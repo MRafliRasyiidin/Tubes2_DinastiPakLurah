@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AutoCompleteInput from './components/AutoComplete.js';
 import NodeGraph from './Graph.js';
 
-function Search({ darkmode }) {
+function Search({ darkmode, searchAlgorithm }) {
   const [start, setStart] = useState('');
   const [target, setTarget] = useState('');
   const [showGraph, setShowGraph] = useState(false);

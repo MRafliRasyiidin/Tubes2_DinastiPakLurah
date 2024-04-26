@@ -51,7 +51,9 @@ function App() {
           />
         </div>
 
-        <Search />
+        <Search 
+          searchAlgorithm={searchAlgorithm}
+        />
         <button onClick={() => setDarkMode(!darkmode)} className={`rounded-lg fixed top-4 right-4 ${darkmode ? 'bg-white hover:bg-gray-600' : 'bg-gray-300 hover:bg-gray-700 hover:text-white'}`}>Dark Mode</button>
       </div>
   );
