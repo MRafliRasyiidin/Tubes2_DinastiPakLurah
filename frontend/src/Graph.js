@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Graph from 'react-vis-network-graph';
 import { v4 as uuidv4 } from 'uuid';
 
-function NodeGraph({ darkmode, start, target}) {
+function NodeGraph({ darkmode, start, target, listSolution}) {
   const [graph, setGraph] = useState({ nodes: [], edges: [] });
+  const [length, setLength] = useState(0);
 
   useEffect(() => {
     const handleSearch = async () => {
@@ -12,12 +13,13 @@ function NodeGraph({ darkmode, start, target}) {
     };
 
     const fetchNodeList = async (start, target, listSolution) => {
-      // template
+      // template (ini dihilangin nanti)
       const nodeLists = [
-        ['Node 1', 'Node 2', 'Node 3', 'Node 4', 'Node 5'],
+        ['Node 1', 'Node 2', 'Node 3'],
         ['node1', 'node2', 'node3'], 
         ['waduh', 'kuda', 'anjing'],
       ];
+      // ini dihilangin kalo udah ada yang fix
       for(let node of nodeLists){
         node.push(target);
         node.unshift(start);
@@ -59,6 +61,7 @@ function NodeGraph({ darkmode, start, target}) {
                   });
               }
           }
+          setLength(path.length);
         }
       }
       setGraph(graphData);
@@ -99,16 +102,19 @@ function NodeGraph({ darkmode, start, target}) {
   };
 
   return (
-    <div>
-      <div style={{ width: '100vh', height: '75vh' }} className="flex items-center align-middle justify-center border  bg-slate-300 rounded-xl  mt-40 mb-10">
-        <Graph
-          key={uuidv4()}
-          options={options}
-          graph={graph}
-          events={events}
-        />
+      <div className = "flex flex-col items-center gap-1 mt-40">
+        <div className = "flex items-center justify-center border ">
+          Found in Depth: {length-1} 
+        </div>
+        <div style={{ width: '100vh', height: '75vh' }} className=" items-center align-middle justify-center border  bg-slate-300 rounded-xl mb-10">
+          <Graph
+            key={uuidv4()}
+            options={options}
+            graph={graph}
+            events={events}
+          />  
+        </div>
       </div>
-    </div>
   );
 }
 
