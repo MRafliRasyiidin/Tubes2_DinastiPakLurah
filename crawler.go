@@ -33,9 +33,7 @@ func dfsPathMaker(node, ender string, adjacencyList *safeorderedmap.SafeOrderedM
 
 	path = append(path, node)
 	pathCopy := []string{}
-	for _, value := range path {
-		pathCopy = append(pathCopy, value)
-	}
+	pathCopy = append(pathCopy, path...)
 	isExist := false
 	for _, value := range *paths {
 		if reflect.DeepEqual(value, pathCopy) {
@@ -87,7 +85,7 @@ func main() {
 	var visitCount int32
 	var depth int32
 	var timer time.Duration
-	result := caller("Medan_Prijaji", "Adolf_Hitler", false, false, &depth, &visitCount, &timer)
+	result := caller("Java", "Pen", true, false, &depth, &visitCount, &timer)
 	fmt.Println(string(result))
 	fmt.Println(timer)
 }
