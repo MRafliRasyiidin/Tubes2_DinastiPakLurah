@@ -49,6 +49,7 @@ const AutoCompleteInput = ({ label, placeholder, listID, onChange, setStart, set
           onChange={handleChange}
           placeholder={placeholder}
           list={listID}
+          id={label}
         />
       </div>
       <datalist id={listID}>

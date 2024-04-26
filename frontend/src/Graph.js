@@ -3,6 +3,30 @@ import Graph from 'react-vis-network-graph';
 import { v4 as uuidv4 } from 'uuid';
 
 function NodeGraph({ darkmode, start, target}) {
+
+  var data = {
+    startLink: start,
+    targetLink: target
+  }
+
+  fetch('/search', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => {
+      if (response.ok) {
+          console.log('Data sent successfully to Go backend');
+      } else {
+          console.error('Failed to send data to Go backend');
+      }
+  })
+  .catch(error => {
+      console.error('Error sending data to Go backend:', error);
+  });
+
   const [graph, setGraph] = useState({ nodes: [], edges: [] });
 
   useEffect(() => {
