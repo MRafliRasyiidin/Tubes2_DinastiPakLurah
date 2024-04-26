@@ -48,6 +48,7 @@ function App() {
             leftInfo={'IDS'}
             rightInfo={'BFS'}
             info={'Algorithm'}
+            color={"#2E51A2"}
           />
         </div>
 
