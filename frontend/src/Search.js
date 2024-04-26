@@ -2,6 +2,31 @@ import React, { useState, useEffect } from 'react';
 import AutoCompleteInput from './AutoComplete.js';
 import NodeGraph from './Graph.js';
 
+function sendData(start, target) {
+  var data = {
+    startLink: start,
+    targetLink: target
+  }
+
+  fetch('/search', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => {
+      if (response.ok) {
+          console.log('Data sent successfully to Go backend');
+      } else {
+          console.error('Failed to send data to Go backend');
+      }
+  })
+  .catch(error => {
+      console.error('Error sending data to Go backend:', error);
+  });
+}
+
 function Search({ darkmode }) {
   const [start, setStart] = useState('');
   const [target, setTarget] = useState('');
@@ -34,6 +59,7 @@ useEffect(() =>{
 }, [start, target]);
 
   const handleSearch = () => {
+    sendData(start, target);
     setShowGraph(true);
   };
 

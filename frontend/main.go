@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 )
 
@@ -16,7 +15,7 @@ type Data struct {
 func main() {
     //http.HandleFunc("/", searchHandler)
     http.HandleFunc("/search", searchHandler)
-    log.Println("Server is running on http://localhost:3000")
+    fmt.Println("Server is running on http://localhost:3000")
     http.ListenAndServe(":3000", nil)
 }
 
@@ -45,7 +44,7 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
     targetWord := data.Target
 
     // Do something with the form data
-    log.Printf("Received form data: Start Word = %s, Target Word = %s\n", startWord, targetWord)
+    fmt.Printf("Received form data: Start Word = %s, Target Word = %s\n", startWord, targetWord)
 
     // You can send a response back to the client if needed
     fmt.Fprintf(w, "Received form data: Start Word = %s, Target Word = %s\n", startWord, targetWord)
