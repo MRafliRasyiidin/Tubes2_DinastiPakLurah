@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<div class="flex flex-col items-center justify-center h-75v">
+    <div class = "text-center mb-10">
+      <h1 class ="font-sans font-bold text-xl">
+        Made By DinastiPakLurah 
+      </h1>
+      <h2>
+        made with happy(tears) and joy(pain)
+      </h2>
+    </div>
+    <div class = "flex flex-col gap-3">
+      <AutoCompleteInput label = "Start word" placeholder = "Informatika" listID = "StartSuggestion"></AutoCompleteInput> 
+      <AutoCompleteInput label = "Target word" placeholder = "ITB" listID = "TargetSuggestion"></AutoCompleteInput> 
+      <form action="/search" method='POST'>
+      <div class = "flex justify-center items-center ">
+        <button id="submitButton" type="submit" class = "bg-gray-400 hover:bg-gray-800 text-white font-bold py-2 px-5 rounded-xl">Search</button>
+      </div>
+      </form>
+    </div>
+
+  </div>
+  </html>
