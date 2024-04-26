@@ -65,7 +65,7 @@ useEffect(() =>{
         setShowGraph(true);
       }
   };
-
+  console.log(searchAlgorithm);
   return (
     <div>
       <div className="flex flex-row items-center justify-center gap-4 ">

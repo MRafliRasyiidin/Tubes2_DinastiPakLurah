@@ -7,6 +7,7 @@ import profileImage1 from '../Logo/rafli.jpg';
 import profileImage2 from '../Logo/indra.jpg'; 
 import profileImage3 from '../Logo/hanief.png'; 
 import { faGithub, faLinkedin, faInstagram } from '@fortawesome/free-brands-svg-icons';
+import ParticleApp from '../components/Background';
 
 
 function About() {
@@ -19,6 +20,7 @@ function About() {
   return (
     <div className="mx-auto h-screen">
       <Navbar/>
+      <ParticleApp/>
       <div className = "flex items-center justify-center">
         <img className="w-auto h-60 hover:scale-125" src={logo} alt="Description of the image" />
       </div>
