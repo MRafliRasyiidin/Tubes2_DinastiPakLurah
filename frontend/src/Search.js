@@ -59,7 +59,7 @@ useEffect(() =>{
         />
       </div>
       <div className="flex justify-center items-center mt-4">
-        <button id="submitButton" type="submit" onClick={handleSearch}  className="bg-gray-400 hover:bg-gray-800 text-white font-bold py-2 px-5 rounded-xl">Search</button>
+        <button id="submitButton" type="submit" onClick={handleSearch}  className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-5 rounded-xl z-10">Search</button>
       </div>
       {showGraph && start && target && 
         <NodeGraph darkmode={darkmode} start={start} target={target} onRender={() => setShowGraph(!showGraph)} />
