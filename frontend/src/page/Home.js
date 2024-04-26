@@ -6,6 +6,30 @@ import lightLogo from "../Logo/logo-light.png";
 import darkLogo from "../Logo/logo-dark.png";
 import ToggleSwitch from "../components/ToggleSwitch";
 
+function sendDataSearchType(type) {
+  var dataMethod = {
+    searchType: type
+  }
+
+  fetch('/type', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(dataMethod)
+  })
+  .then(response => {
+      if (response.ok) {
+          console.log('Data sent successfully to Go backend');
+      } else {
+          console.error('Failed to send data to Go backend');
+      }
+  })
+  .catch(error => {
+      console.error('Error sending data to Go backend:', error);
+  });
+}
+
 function App() {
   const [searchAlgorithm, setSearchAlgorithm] = useState('BFS');
   const [darkmode, setDarkMode] = useState(false); 
@@ -13,6 +37,7 @@ function App() {
 
   const toggleAlgorithm = () => {
     setSearchAlgorithm(searchAlgorithm === 'BFS' ? 'IDS' : 'BFS');
+    sendDataSearchType(searchAlgorithm);
     console.log(searchAlgorithm);
   };
   return (
