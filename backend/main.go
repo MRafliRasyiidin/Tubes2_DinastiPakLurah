@@ -49,4 +49,11 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 
     // You can send a response back to the client if needed
     fmt.Fprintf(w, "Received form data: Start Word = %s, Target Word = %s\n", startWord, targetWord)
+
+    runWikiRace(startWord, targetWord, true);
+}
+
+func runWikiRace(start string, target string, searchType bool) {
+    fmt.Println(start, target);
+    algorithm(start, target)
 }
