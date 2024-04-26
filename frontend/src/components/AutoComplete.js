@@ -15,7 +15,13 @@ const AutoCompleteInput = ({ label, placeholder, listID, onChange, setStart, set
             search: searchTerm
           }
         });
-        setSearchResults(response.data[1]);
+        console.log(response.data[3])
+        const suggestionsWithImages = response.data[1].map((suggestion, index) => ({
+          text: suggestion,
+          imageUrl: response.data[0][index] || '' // Modify this based on your actual data structure
+        }));
+
+        setSearchResults(suggestionsWithImages);
       } catch (error) {
         console.error('Error fetching suggestions:', error);
       }
@@ -53,7 +59,10 @@ const AutoCompleteInput = ({ label, placeholder, listID, onChange, setStart, set
       </div>
       <datalist id={listID}>
         {searchResults.map((suggestion, index) => (
-          <option key={index} value={suggestion} />
+          <option key={index} value={suggestion.text}>
+            {suggestion.imageUrl && <img src={suggestion.imageUrl} alt={`Image for ${suggestion.text}`} />}
+            {suggestion.text}
+          </option>
         ))}
       </datalist>
     </form>
