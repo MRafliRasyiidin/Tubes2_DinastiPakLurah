@@ -1,19 +1,20 @@
-import './App.css';
+// App.js
+
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import About from './About';
-import Home from './Home'
+import About from './page/About';
+import Home from './page/Home';
 
 function App() {
-
   return (
-    <div className={`flex flex-col items-center justify-center h-max w-auto`}>
-        <Router>
+    <div>
+      <Router>
         <Routes>
-          <Route path="/" target element={<Home/>} />
-          <Route path="/about" target element={<About/>} />
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
         </Routes>
       </Router>
-      </div>
+    </div>
   );
 }
 

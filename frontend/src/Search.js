@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import AutoCompleteInput from './AutoComplete.js';
+import AutoCompleteInput from './components/AutoComplete.js';
 import NodeGraph from './Graph.js';
 
 function Search({ darkmode }) {
