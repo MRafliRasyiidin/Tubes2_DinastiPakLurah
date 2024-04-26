@@ -4,10 +4,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
+	"strings"
 	"time"
 
 	"github.com/thalesfsp/go-common-types/safeorderedmap"
 )
+
+func extractTitle(url string) string {
+	parts := strings.Split(url, "/")
+	title := parts[len(parts)-1]
+	title = strings.ReplaceAll(title, "_", " ")
+	return title
+}
 
 func dfsPathMaker(node, ender string, adjacencyList *safeorderedmap.SafeOrderedMap[[]string], path []string, paths *[][]string, depth int32) {
 	adjacent, _ := adjacencyList.Get(node)
@@ -27,7 +35,7 @@ func dfsPathMaker(node, ender string, adjacencyList *safeorderedmap.SafeOrderedM
 	}
 	if finish && !isExist {
 		for i, j := 0, len(pathCopy)-1; i < j; i, j = i+1, j-1 {
-			pathCopy[i], pathCopy[j] = pathCopy[j], pathCopy[i]
+			pathCopy[i], pathCopy[j] = extractTitle(pathCopy[j]), extractTitle(pathCopy[i])
 		}
 		*paths = append(*paths, pathCopy)
 	} else {
