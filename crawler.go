@@ -10,6 +10,16 @@ import (
 	"github.com/thalesfsp/go-common-types/safeorderedmap"
 )
 
+func linkNotInside(linkEntry, linkTarget string, pathMap *safeorderedmap.SafeOrderedMap[[]string]) bool {
+	slicePath, _ := pathMap.Get(linkEntry)
+	for _, link := range slicePath {
+		if link == linkTarget {
+			return false
+		}
+	}
+	return true
+}
+
 func extractTitle(url string) string {
 	parts := strings.Split(url, "/")
 	title := parts[len(parts)-1]
@@ -77,7 +87,7 @@ func main() {
 	var visitCount int32
 	var depth int32
 	var timer time.Duration
-	result := caller("Medan_Prijaji", "Adolf_Hitler", true, false, &depth, &visitCount, &timer)
+	result := caller("Medan_Prijaji", "Adolf_Hitler", false, false, &depth, &visitCount, &timer)
 	fmt.Println(string(result))
 	fmt.Println(timer)
 }

@@ -21,16 +21,6 @@ var (
 	controlBFS = make(chan emptyNFound)
 )
 
-func linkNotInside(linkEntry, linkTarget string, pathMap *safeorderedmap.SafeOrderedMap[[]string]) bool {
-	slicePath, _ := pathMap.Get(linkEntry)
-	for _, link := range slicePath {
-		if link == linkTarget {
-			return false
-		}
-	}
-	return true
-}
-
 func BFS(start string, target string, path *safeorderedmap.SafeOrderedMap[[]string], queue *safeorderedmap.SafeOrderedMap[bool], depth *int32, visitCount *int32, searchAll bool, timer *time.Time) {
 	var mutex sync.Mutex
 	var inserter emptyNFound
