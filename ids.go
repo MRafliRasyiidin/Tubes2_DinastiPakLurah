@@ -62,7 +62,9 @@ func crawlerDLS(start string, target string, depth int, visitCount *int32, linkF
 		if link == "/wiki/"+target {
 			*timer = time.Now()
 			fmt.Println("Found target link at depth", depth+1, ":", link, time.Since(*timer))
-			path.Add(e.Request.AbsoluteURL(link), append(pathInserter, e.Request.URL.String()))
+			if linkNotInside(e.Request.AbsoluteURL(link), e.Request.URL.String(), path) {
+				path.Add(e.Request.AbsoluteURL(link), append(pathInserter, e.Request.URL.String()))
+			}
 			atomic.AddInt32(linkFound, 1)
 			inserter.done = true
 			inserter.found = depth
@@ -83,8 +85,9 @@ func crawlerDLS(start string, target string, depth int, visitCount *int32, linkF
 			!strings.Contains(link, "_talk:") &&
 			e.Request.AbsoluteURL(link) != e.Request.URL.String() &&
 			link != "/wiki/Main_Page" {
-
-			path.Add(e.Request.AbsoluteURL(link), append(pathInserter, e.Request.URL.String()))
+			if linkNotInside(e.Request.AbsoluteURL(link), e.Request.URL.String(), path) {
+				path.Add(e.Request.AbsoluteURL(link), append(pathInserter, e.Request.URL.String()))
+			}
 			e.Request.Visit(link)
 		}
 	})
@@ -111,7 +114,7 @@ incrementLoop:
 		fmt.Println("Searching at depth:", i)
 		go crawlerDLS(start, target, i, visitCount, &linkFound, path, visited, &callerTimer)
 		controlFlow := <-controlIDS
-		if controlFlow.found != -1 && controlFlow.found < i && controlFlow.done || (atomic.LoadInt32(&linkFound) >= 1 && time.Since(callerTimer) > 400*time.Nanosecond && !searchAll) || atomic.LoadInt32(depth) > 9 {
+		if controlFlow.found != -1 && controlFlow.found < i && controlFlow.done || (atomic.LoadInt32(&linkFound) >= 1 && time.Since(callerTimer) > 500*time.Millisecond && !searchAll) || atomic.LoadInt32(depth) > 9 {
 			if controlFlow.found != -1 && controlFlow.found < i && controlFlow.done {
 				atomic.AddInt32(depth, -1)
 			}
