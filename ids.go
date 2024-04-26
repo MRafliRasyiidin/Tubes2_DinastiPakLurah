@@ -21,7 +21,7 @@ var (
 	controlChan = make(chan pairChan)
 )
 
-func crawlerDLS(start string, target string, depth int, path *safeorderedmap.SafeOrderedMap[[]string]) {
+func crawlerDLS(start string, target string, depth int, visitCount *int32, path *safeorderedmap.SafeOrderedMap[[]string], visited *safeorderedmap.SafeOrderedMap[bool]) {
 	var inserter pairChan
 	c := colly.NewCollector(
 		colly.AllowedDomains("en.wikipedia.org"),
@@ -45,6 +45,11 @@ func crawlerDLS(start string, target string, depth int, path *safeorderedmap.Saf
 
 	c.OnResponse(func(r *colly.Response) {
 		fmt.Println("Visited", r.Request.URL)
+		hasVisited, _ := visited.Get(r.Request.URL.String())
+		if !hasVisited {
+			visited.Add(r.Request.URL.String(), true)
+			atomic.StoreInt32(visitCount, atomic.LoadInt32(visitCount)+1)
+		}
 	})
 
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
@@ -75,6 +80,7 @@ func crawlerDLS(start string, target string, depth int, path *safeorderedmap.Saf
 			!strings.Contains(link, "_talk:") &&
 			e.Request.AbsoluteURL(link) != e.Request.URL.String() &&
 			link != "/wiki/Main_Page" {
+
 			path.Add(e.Request.AbsoluteURL(link), append(pathInserter, e.Request.URL.String()))
 			e.Request.Visit(link)
 		}
@@ -91,16 +97,16 @@ func crawlerDLS(start string, target string, depth int, path *safeorderedmap.Saf
 	controlChan <- inserter
 }
 
-func crawlerIDS(start, target string, path *safeorderedmap.SafeOrderedMap[[]string], depth *int32) {
+func crawlerIDS(start, target string, path *safeorderedmap.SafeOrderedMap[[]string], depth *int32, visitCount *int32) {
 	// os.RemoveAll("./cache")
+	visited := safeorderedmap.New[bool]()
 	i := 0
 incrementLoop:
 	for {
 		fmt.Println("Searching at depth:", i)
-		go crawlerDLS(start, target, i, path)
+		go crawlerDLS(start, target, i, visitCount, path, visited)
 		controlFlow := <-controlChan
 		if controlFlow.found && controlFlow.done {
-			time.Sleep(5 * time.Second)
 			break incrementLoop
 		}
 		if controlFlow.done && !controlFlow.found {
