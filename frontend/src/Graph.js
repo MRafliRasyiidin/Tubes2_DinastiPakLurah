@@ -75,22 +75,28 @@ function NodeGraph({ darkmode, start, target, listSolution}) {
   const options = {
     edges: {
       color: {
-        color: '#b32e2e',
-        highlight: '#b32e2e',
-        hover: '#b32e2e',
+        color: '#888888',
+        highlight: '#888888',
+        hover: '#888888',
         opacity: 1,
         inherit: false,
       },
-      width: 2,
+      width: 0.75,
       dashes: false,
+      arrows: {
+        to: {enabled: true, scaleFactor: 1, type: 'arrow'},
+      }
     },
     height: '700px',
     layout: {
       hierarchical: false,
       improvedLayout: true,
     },
-    physics: true, 
-
+    physics: true,
+    nodes:{
+      shape:'triangleDown',
+      size :'15'
+    },
   };
 
   const events = {
