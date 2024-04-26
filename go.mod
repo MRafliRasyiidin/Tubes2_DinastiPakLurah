@@ -3,7 +3,6 @@ module github.com/x/y
 go 1.18
 
 require (
-	github.com/elliotchance/orderedmap/v2 v2.2.0
 	github.com/gocolly/colly/v2 v2.1.0
 	github.com/thalesfsp/go-common-types v0.2.4
 )
