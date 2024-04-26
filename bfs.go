@@ -8,9 +8,17 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/elliotchance/orderedmap/v2"
 	"github.com/gocolly/colly/v2"
 	"github.com/thalesfsp/go-common-types/safeorderedmap"
+)
+
+type emptyNFound struct {
+	found bool
+	empty bool
+}
+
+var (
+	controlBFS = make(chan emptyNFound)
 )
 
 func linkNotInside(linkEntry, linkTarget string, pathMap *safeorderedmap.SafeOrderedMap[[]string]) bool {
@@ -23,12 +31,13 @@ func linkNotInside(linkEntry, linkTarget string, pathMap *safeorderedmap.SafeOrd
 	return true
 }
 
-func BFS(start string, target string, path *safeorderedmap.SafeOrderedMap[[]string], queue *orderedmap.OrderedMap[string, any], depth *int32, visitCount *int32, searchAll bool, timer *time.Time) {
+func BFS(start string, target string, path *safeorderedmap.SafeOrderedMap[[]string], queue *safeorderedmap.SafeOrderedMap[bool], depth *int32, visitCount *int32, searchAll bool, timer *time.Time) {
 	var mutex sync.Mutex
+	var inserter emptyNFound
 	visits := safeorderedmap.New[bool]()
 
 	// path := safeorderedmap.New[[]string]()
-	queueChild := orderedmap.NewOrderedMap[string, any]()
+	queueChild := safeorderedmap.New[bool]()
 	var found int32
 
 	c := colly.NewCollector(
@@ -50,10 +59,10 @@ func BFS(start string, target string, path *safeorderedmap.SafeOrderedMap[[]stri
 		log.Println("Something went wrong:", err)
 		mutex.Lock()
 		queue.Delete(r.Request.URL.String())
-		if queue.Len() == 0 && atomic.LoadInt32(&found) != 1 {
+		if queue.Size() == 0 && atomic.LoadInt32(&found) != 1 {
 			queue, queueChild = queueChild, queue
-			queueChild = orderedmap.NewOrderedMap[string, any]()
-			atomic.StoreInt32(depth, atomic.LoadInt32(depth)+1)
+			queueChild = safeorderedmap.New[bool]()
+			atomic.AddInt32(depth, 1)
 			fmt.Println("Searching at depth:", atomic.LoadInt32(depth))
 		}
 		mutex.Unlock()
@@ -75,12 +84,13 @@ func BFS(start string, target string, path *safeorderedmap.SafeOrderedMap[[]stri
 			if linkNotInside(h.Request.AbsoluteURL(link), h.Request.URL.String(), path) {
 				path.Add(h.Request.AbsoluteURL(link), append(pathInserter, h.Request.URL.String()))
 			}
-			atomic.StoreInt32(&found, atomic.LoadInt32(&found)+1)
+			atomic.AddInt32(&found, 1)
 			return
 		}
 		if strings.HasPrefix(link, "/wiki/") &&
 			!strings.Contains(link, "File:") &&
 			!strings.Contains(link, "Help:") &&
+			!strings.Contains(link, "Category:") &&
 			!strings.Contains(link, "Wikipedia:") &&
 			!strings.Contains(link, "Talk:") &&
 			!strings.Contains(link, "Special:") &&
@@ -94,7 +104,7 @@ func BFS(start string, target string, path *safeorderedmap.SafeOrderedMap[[]stri
 			mutex.Lock()
 			visited, _ := visits.Get(h.Request.AbsoluteURL(link))
 			if !visited {
-				queueChild.Set(h.Request.AbsoluteURL(link), true)
+				queueChild.Add(h.Request.AbsoluteURL(link), true)
 			}
 			mutex.Unlock()
 			if linkNotInside(h.Request.AbsoluteURL(link), h.Request.URL.String(), path) {
@@ -106,37 +116,58 @@ func BFS(start string, target string, path *safeorderedmap.SafeOrderedMap[[]stri
 	c.OnScraped(func(r *colly.Response) {
 		// fmt.Println("Finished", r.Request.URL)
 		mutex.Lock()
-		atomic.StoreInt32(visitCount, atomic.LoadInt32(visitCount)+1)
+		atomic.AddInt32(visitCount, 1)
 		queue.Delete(r.Request.URL.String())
-		if queue.Len() == 0 && atomic.LoadInt32(&found) != 1 {
+		fmt.Println(queue.Size())
+		if queue.Size() == 0 {
+			inserter.empty = true
+		} else {
+			inserter.empty = false
+		}
+		if atomic.LoadInt32(&found) >= 1 {
+			inserter.found = true
+		} else {
+			inserter.found = false
+		}
+		if queue.Size() == 0 && atomic.LoadInt32(&found) != 1 {
 			queue, queueChild = queueChild, queue
-			queueChild = orderedmap.NewOrderedMap[string, any]()
-			atomic.StoreInt32(depth, atomic.LoadInt32(depth)+1)
+			queueChild = safeorderedmap.New[bool]()
+			atomic.AddInt32(depth, 1)
 			fmt.Println("Searching at depth:", atomic.LoadInt32(depth))
 		}
 		mutex.Unlock()
+		controlBFS <- inserter
 	})
 
 queueIteration:
 	for {
 		mutex.Lock()
-		for el := queue.Front(); el != nil; el = el.Next() {
-			visits.Add(el.Key, true)
-			c.Visit(el.Key)
-		}
+		queue.Each(func(key string, value bool) {
+			visits.Add(key, true)
+			c.Visit(key)
+		})
 		mutex.Unlock()
-		if queue.Len() == 0 || (atomic.LoadInt32(&found) >= 1 && time.Since(*timer) > 3*time.Second && !searchAll) || atomic.LoadInt32(depth) > 9 {
+		controller := <-controlBFS
+
+		// fmt.Println("Periksa queue", queue.Len())
+		if controller.empty && controller.found || (atomic.LoadInt32(&found) >= 1 && time.Since(*timer) > 3*time.Second && !searchAll) || atomic.LoadInt32(depth) > 9 {
+			// if controller.empty && controller.found {
+			if controller.empty && controller.found {
+				atomic.AddInt32(depth, -1)
+			}
 			c.AllowedDomains = []string{""}
 			break queueIteration
 		}
+		// breaker:
+		// 	break queueIteration
 	}
 }
 
 func crawlerBFS(start string, target string, path *safeorderedmap.SafeOrderedMap[[]string], depth *int32, visitCount *int32, searchAll bool, timer time.Time) {
 	var wg sync.WaitGroup
 	callerTimer := timer
-	queue := orderedmap.NewOrderedMap[string, any]()
-	queue.Set("https://en.wikipedia.org/wiki/"+start, true)
+	queue := safeorderedmap.New[bool]()
+	queue.Add("https://en.wikipedia.org/wiki/"+start, true)
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
