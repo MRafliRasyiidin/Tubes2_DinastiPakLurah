@@ -34,7 +34,7 @@ package main
 import (
 	"fmt"
 	"reflect"
-	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/thalesfsp/go-common-types/safeorderedmap"
@@ -76,20 +76,16 @@ func converter(adjacencyList *safeorderedmap.SafeOrderedMap[[]string], start, en
 }
 
 func main() {
-	var wg sync.WaitGroup
 	var depth int32 = 0
+	var visitCount int32 = 0
 	start := time.Now()
 	path := safeorderedmap.New[[]string]()
 	linkStart := "Medan_Prijaji"
 	linkTarget := "Adolf_Hitler"
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		crawlerBFS(linkStart, linkTarget, path, &depth, start)
-		// crawlerIDS(linkStart, linkTarget, path, &depth)
-	}()
-	wg.Wait()
+	// crawlerBFS(linkStart, linkTarget, path, &depth, &visitCount, false, start)
+	crawlerIDS(linkStart, linkTarget, path, &depth, &visitCount)
 	fmt.Println("DEPTH IS", depth+1)
+	fmt.Println("Visit Count:", atomic.LoadInt32(&visitCount))
 	paths := converter(path, linkTarget, linkStart, depth)
 	for _, res := range paths {
 		if res[len(res)-1] == "https://en.wikipedia.org/wiki/"+linkStart {
