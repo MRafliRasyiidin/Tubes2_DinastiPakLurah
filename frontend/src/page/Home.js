@@ -17,16 +17,17 @@ function App() {
     setSearchAlgorithm(searchAlgorithm === 'BFS' ? 'IDS' : 'BFS');
     // console.log(searchAlgorithm);
   };
-
+  
   const toggleAll = () =>{
-    setSearchAll(searchAll === 'All' ? 'One' : 'All');
+    setSearchAll(searchAll === 'One' ? 'All' : 'One');
     console.log(searchAll);
   }
   return (
-
+    
     <div className={`flex flex-col items-center justify-center h-max w-auto`}>
+      <ParticleApp/>
         <Navbar darkmode={darkmode} />
-        <img className="w-auto h-80 top-20" src={logo} alt="Description of the image" />
+        <img className="w-auto h-80 top-20 z-10" src={logo} alt="Description of the image" />
         <div className="text-center mb-10">
           <h1 className={`font-sans font-bold text-xl ${darkmode ? 'text-white' : 'text-black'}`}>
             Made By DinastiPakLurah 
@@ -37,12 +38,12 @@ function App() {
         </div>
         <div className = "flex flex-col justify-center items-center">
           <ToggleSwitch
-            checked={searchAll === 'All'} 
+            checked={searchAll === 'One'} 
             onChange={toggleAll}
-            leftInfo={'Yes'}
-            rightInfo={'No'}
-            color={"#2E51A2"}
-            scolor={"#D1D5DB"}
+            leftInfo={'No'}
+            rightInfo={'Yes'}
+            color={"#D1D5DB"}
+            scolor={"#2E51A2"}
             info={'Search all'}
           />
           <ToggleSwitch
@@ -55,11 +56,10 @@ function App() {
           />
         </div>
 
-        <Search 
+        <Search
           searchAlgorithm={searchAlgorithm}
         />
         <button onClick={() => setDarkMode(!darkmode)} className={`rounded-lg fixed top-4 right-4 ${darkmode ? 'bg-white hover:bg-gray-600' : 'bg-gray-300 hover:bg-gray-700 hover:text-white'}`}>Dark Mode</button>
-        <ParticleApp/>
       </div>
   );
 }

@@ -22,17 +22,17 @@ const ParticleApp = () => {
       fpsLimit: 60,
       particles: {
         number: {
-          value: 80,
+          value: 90,
           density: {
             enable: true,
-            value_area: 800,
+            value_area: 1000,
           },
         },
         color: {
           value: "#82807a",
         },
         shape: {
-          type: "circle",
+          type: "triangle",
         },
         opacity: {
           value: 0.5,
@@ -50,6 +50,14 @@ const ParticleApp = () => {
           straight: false,
           out_mode: "out",
           bounce: false,
+        },
+        links: {
+          enable: true,
+          opacity: 0.5,
+          color: "#82807a",
+          distance: 200, 
+          width: 2,
+          blink: false,
         },
       },
     };

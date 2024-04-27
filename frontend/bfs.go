@@ -164,4 +164,10 @@ func crawlerBFS(start string, target string, path *safeorderedmap.SafeOrderedMap
 		BFS(start, target, path, queue, depth, visitCount, searchAll, &callerTimer)
 	}()
 	wg.Wait()
+
+	// Edge case nguawur
+	_, targetInPath := path.Get("https://en.wikipedia.org/wiki/" + target)
+	if atomic.LoadInt32(depth) == -1 && targetInPath {
+		atomic.StoreInt32(depth, 1)
+	}
 }

@@ -43,7 +43,7 @@ const AutoCompleteInput = ({ label, placeholder, listID, onChange, setStart, set
       <div className="flex items-center">
         <label>{label}</label>
         <input
-          className="bg-gray-400 hover:bg-gray-700 w-48 h-10 rounded-xl w-30 placeholder-white"
+          className="bg-gray-500 hover:bg-gray-700 focus:bg-gray-700 w-48 h-10 rounded-xl w-30 placeholder-white indent-5 text-white z-10 "
           type="text"
           value={searchTerm}
           onChange={handleChange}

@@ -22,7 +22,7 @@ function About() {
       <Navbar/>
       <ParticleApp/>
       <div className = "flex items-center justify-center">
-        <img className="w-auto h-60 hover:scale-125" src={logo} alt="Description of the image" />
+        <img className="w-auto h-60 hover:scale-125 z-10" src={logo} alt="Description of the image" />
       </div>
         <div className = "flex flex-col items-center ">
           <h1 className="text-3xl font-bold mt-10">Dinasti Pak Lurah Crew</h1>
@@ -56,13 +56,12 @@ function About() {
             <h2 className="text-lg font-semibold">M. Hanief Fatkhan Nashrullah</h2>
             <RoundedImage imageUrl={imagePath[2]} altText="Profile Image 2" />
             <p className="mt-2 text-center">Biasa dipanggil Hanief, orangnya oke
-            <br/>ga juga sih, orang ini sering banget ngasih rickroll
+            <br/>ga juga sih, orang ini sering banget ngasih [disensor oleh Hanief]
             </p>
             <div className="flex flex-col items-center mt-4 space-x-2">
-              <IconMe url={"https://github.com/hannoobz"} description={"Github"} icon={faGithub}/>
-              <IconMe url={"https://github.com/hannoobz"} description={"LinkedIn"} icon={faLinkedin}/>
-              <IconMe url={"https://github.com/hannoobz"} description={"Instagram"} icon={faInstagram}/>
-              <IconMe url={"https://github.com/hannoobz"} description={"Special"}/>
+              <IconMe url={"https://bit.ly/GitHub-hnf"} description={"Github"} icon={faGithub}/>
+              <IconMe url={"https://bit.ly/LinkedIn-hnf"} description={"LinkedIn"} icon={faLinkedin}/>
+              <IconMe url={"https://bit.ly/Instagram-hnf"} description={"Instagram"} icon={faInstagram}/>
             </div>
           </div>
 

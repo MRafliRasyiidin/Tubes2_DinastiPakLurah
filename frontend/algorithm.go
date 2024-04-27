@@ -33,9 +33,7 @@ func dfsPathMaker(node, ender string, adjacencyList *safeorderedmap.SafeOrderedM
 
 	path = append(path, node)
 	pathCopy := []string{}
-	for _, value := range path {
-		pathCopy = append(pathCopy, value)
-	}
+	pathCopy = append(pathCopy, path...)
 	isExist := false
 	for _, value := range *paths {
 		if reflect.DeepEqual(value, pathCopy) {
@@ -65,7 +63,7 @@ func converter(adjacencyList *safeorderedmap.SafeOrderedMap[[]string], start, en
 	return paths
 }
 
-func caller(linkStart, linkTarget string, isBFS bool, searchAll bool, depth, visitCount *int32, timer *time.Duration) []byte {
+func caller(linkStart, linkTarget string, isBFS, searchAll bool, depth, visitCount *int32, timer *time.Duration) []byte {
 	start := time.Now()
 	path := safeorderedmap.New[[]string]()
 	if isBFS {

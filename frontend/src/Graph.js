@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Graph from 'react-vis-network-graph';
 import { v4 as uuidv4 } from 'uuid';
 
-function NodeGraph({ darkmode, start, target}) {
-
+function NodeGraph({ darkmode, showGraph, start, target, listSolution}) {
   const [graph, setGraph] = useState({ nodes: [], edges: [] });
+  const [length, setLength] = useState(0);
 
   useEffect(() => {
     const handleSearch = async () => {
@@ -20,13 +20,14 @@ function NodeGraph({ darkmode, start, target}) {
       generateGraph(data);
     };
 
-    const fetchNodeList = async (start, target, listSolution) => {
-      // template
+    const fetchNodeList = async (showGraph, start, target, listSolution) => {
+      // template (ini dihilangin nanti)
       const nodeLists = [
-        ['Node 1', 'Node 2', 'Node 3', 'Node 4', 'Node 5'],
-        ['node1', 'node2', 'node3'], 
-        ['waduh', 'kuda', 'anjing'],
+        ['United States', 'German', 'Indonesia'],
+        ['Hoyoverse', 'Genshin Impact', 'Wuthering Waves'], 
+        ['waduh', 'kuda', 'Rick Roll'],
       ];
+      // ini dihilangin kalo udah ada yang fix
       for(let node of nodeLists){
         node.push(target);
         node.unshift(start);
@@ -48,10 +49,11 @@ function NodeGraph({ darkmode, start, target}) {
           const isNewNode = !graphData.nodes.find(n => n.label === node);
 
           if(isNewNode){
+            let link = path[i].replace(' ', '_');
             graphData.nodes.push({
               id: `${uuidv4()}`,
               label: path[i],
-              title: path[i],
+              title: `https://en.wikipedia.org/wiki/${link}`,
             });
           }
   
@@ -68,56 +70,84 @@ function NodeGraph({ darkmode, start, target}) {
                   });
               }
           }
+          setLength(path.length);
         }
       }
       setGraph(graphData);
     };
 
-    if (start && target) {
+    if (start && target && showGraph) {
       handleSearch();
     }
-  }, [start, target]);
+  }, [start, target, showGraph]);
 
   const options = {
     edges: {
       color: {
-        color: '#b32e2e',
-        highlight: '#b32e2e',
-        hover: '#b32e2e',
+        color: '#888888',
+        highlight: '#888888',
+        hover: '#888888',
         opacity: 1,
         inherit: false,
       },
-      width: 2,
+      width: 0.75,
       dashes: false,
+      arrows: {
+        to: {enabled: true, scaleFactor: 1, type: 'arrow'},
+      }
     },
-    height: '700px',
+    height: '630px',
     layout: {
-      hierarchical: false,
-      improvedLayout: true,
-    },
-    physics: true, 
+      hierarchical: {
+        direction: 'LR', 
+        sortMethod: 'directed', 
+        levelSeparation: 300,
+      }
 
+    },
+    physics: {
+      enabled: true,
+      hierarchicalRepulsion: {
+        nodeDistance: 100, 
+      },
+    },
+    nodes:{
+      shape:'triangleDown',
+      size :10,
+      mass: 1,
+    },
   };
 
-  const events = {
-    select: function (event) {
-      var { nodes, edges } = event;
-      console.log(nodes);
-      console.log(edges);
+  const handleNodeClick = (event) => {
+    const { nodes } = event;
+    if (nodes.length > 0) {
+      const clickedNodeId = nodes[0]; 
+      const clickedNode = graph.nodes.find(node => node.id === clickedNodeId);
+      if (clickedNode) {
+        window.open(clickedNode.title, '_blank'); 
+      }
     }
   };
 
+  const events = {
+    selectNode: handleNodeClick // Call handleNodeClick when a node is selected
+  };
+
+  
   return (
-    <div>
-      <div style={{ width: '100vh', height: '75vh' }} className="flex items-center align-middle justify-center border  bg-slate-300 rounded-xl  mt-40 mb-10">
-        <Graph
-          key={uuidv4()}
-          options={options}
-          graph={graph}
-          events={events}
-        />
+      <div className = "flex flex-col items-center gap-1 mt-40">
+        <div className = "flex items-center justify-center border ">
+          Found in Depth: {length-1} 
+        </div>
+        <div style={{ width: '100vh', height: '75vh' }} className="items-center align-middle justify-center border  bg-slate-300 rounded-xl mb-10">
+          <Graph
+            key={uuidv4()}
+            options={options}
+            graph={graph}
+            events={events}
+          />  
+        </div>
       </div>
-    </div>
   );
 }
 
