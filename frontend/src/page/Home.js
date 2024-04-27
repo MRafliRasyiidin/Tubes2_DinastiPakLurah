@@ -17,14 +17,15 @@ function App() {
     setSearchAlgorithm(searchAlgorithm === 'BFS' ? 'IDS' : 'BFS');
     // console.log(searchAlgorithm);
   };
-
+  
   const toggleAll = () =>{
     setSearchAll(searchAll === 'One' ? 'All' : 'One');
     console.log(searchAll);
   }
   return (
-
+    
     <div className={`flex flex-col items-center justify-center h-max w-auto`}>
+      <ParticleApp/>
         <Navbar darkmode={darkmode} />
         <img className="w-auto h-80 top-20 z-10" src={logo} alt="Description of the image" />
         <div className="text-center mb-10">
@@ -55,11 +56,10 @@ function App() {
           />
         </div>
 
-        <Search 
+        <Search
           searchAlgorithm={searchAlgorithm}
         />
         <button onClick={() => setDarkMode(!darkmode)} className={`rounded-lg fixed top-4 right-4 ${darkmode ? 'bg-white hover:bg-gray-600' : 'bg-gray-300 hover:bg-gray-700 hover:text-white'}`}>Dark Mode</button>
-        <ParticleApp/>
       </div>
   );
 }

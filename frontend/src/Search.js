@@ -1,50 +1,39 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import AutoCompleteInput from './components/AutoComplete.js';
 import NodeGraph from './Graph.js';
 
 function Search({ darkmode, searchAlgorithm }) {
   const [start, setStart] = useState('');
   const [target, setTarget] = useState('');
+  const [startTemp, setStartTemp] = useState('');
+  const [targetTemp, setTargetTemp] = useState('');
   const [showGraph, setShowGraph] = useState(false);
 
-  const handleStartChange = (value) => {
-    setStart(value);
-  };
-
-  const handleTargetChange = (value) => {
-    setTarget(value);
-  };
-
-//   useEffect(() => {
-//     console.log(start);
-//   }, [start]);
-
-//   useEffect(() => {
-//     console.log(target);
-//   }, [target]);
-
-useEffect(() => {
-    console.log(showGraph);
-  }, [showGraph]);
-
-useEffect(() =>{
-  if(start && target){
-    setShowGraph(false);
-  } 
-}, [start, target]);
-
   const handleSearch = () => {
-    setShowGraph(true);
+    if(startTemp){
+      setStart(startTemp); 
+    }
+    if(targetTemp){
+      setTarget(targetTemp);
+    }
+    if((startTemp && targetTemp)){
+      setStart(startTemp);
+      setTarget(targetTemp);
+      setStartTemp("");
+      setTargetTemp("");
+      setShowGraph(true);
+    }
   };
-  console.log(searchAlgorithm);
+
   return (
-    <div>
-      <div className="flex flex-row items-center justify-center gap-4 ">
+    <div className = "z-10">
+      <div className="flex flex-row items-center justify-center gap-4 relative">
         <AutoCompleteInput
           placeholder="Start"
+          ID = "start"
           listID="StartSuggestion"
-          onChange={(value) => handleStartChange(value)}
-          setStart={setStart} 
+          onChange={(value) => setStartTemp(value)}
+          setStart={setStartTemp} 
         />
         <div>
           <h1 className={`${darkmode ? 'text-white' : 'text-black'}`}>
@@ -53,16 +42,17 @@ useEffect(() =>{
         </div>
         <AutoCompleteInput
           placeholder="Target"
+          ID = "target"
           listID="TargetSuggestion"
-          onChange={(value) => handleTargetChange(value)}
-          setTarget={setTarget} 
+          onChange={(value) => setTargetTemp(value)}
+          setTarget={setTargetTemp} 
         />
       </div>
       <div className="flex justify-center items-center mt-4">
-        <button id="submitButton" type="submit" onClick={handleSearch}  className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-5 rounded-xl z-10">Search</button>
+        <button id="submitButton" type="submit"  onClick={handleSearch} className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-5 rounded-xl z-10">Search</button>
       </div>
-      {showGraph && start && target && 
-        <NodeGraph darkmode={darkmode} start={start} target={target} onRender={() => setShowGraph(!showGraph)} />
+      {start && target && 
+        <NodeGraph darkmode={darkmode} showGraph={showGraph}start={start} target={target} />
       }</div>
   );
 }
