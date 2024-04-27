@@ -1,7 +1,7 @@
 package main
 
 import (
-	"encoding/json"
+	//"encoding/json"
 	"fmt"
 	"reflect"
 	"strings"
@@ -64,7 +64,7 @@ func converter(adjacencyList *safeorderedmap.SafeOrderedMap[[]string], start, en
 	return paths
 }
 
-func caller(linkStart, linkTarget string, isBFS, searchAll bool, depth, visitCount *int32, timer *time.Duration) []byte {
+func caller(linkStart, linkTarget string, isBFS, searchAll bool, depth, visitCount *int32, timer *time.Duration) [][]string {
 	start := time.Now()
 	path := safeorderedmap.New[[]string]()
 	if isBFS {
@@ -75,19 +75,15 @@ func caller(linkStart, linkTarget string, isBFS, searchAll bool, depth, visitCou
 	paths := converter(path, linkTarget, linkStart, *depth)
 
 	*timer = time.Since(start)
-	jsonString, err := json.Marshal(paths)
-	if err != nil {
-		fmt.Println(err)
-	}
-	return jsonString
+	return paths
 }
 
-func runAlgorithm(start string, target string, bfs bool) []byte {
+func runAlgorithm(start string, target string, bfs bool) ([][]string, time.Duration, int32) {
 	var visitCount int32
 	var depth int32
 	var timer time.Duration
 	result := caller(start, target, bfs, false, &depth, &visitCount, &timer)
-	fmt.Println(string(result))
+	fmt.Println(result)
 	fmt.Println(timer)
-	return result
+	return result, timer, visitCount
 }

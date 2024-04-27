@@ -26,9 +26,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "npm run start-node",
+    "start": "react-scripts start",
     "server": "go run .",
-    "start-node": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

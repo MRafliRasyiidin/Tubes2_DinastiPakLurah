@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"os"
+	//"time"
 
 	//"fmt"
 	"io"
@@ -98,13 +99,28 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 	if searchMethod == "IDS" {
 		bfsMethod = false
 	}
-	path_result := runAlgorithm(startWord, targetWord, bfsMethod)
+	path_result, timer, visit_count := runAlgorithm(startWord, targetWord, bfsMethod)
 	// Set the content type header to JSON
-	w.Header().Set("Content-Type", "application/json")
 
-	// Write the JSON-encoded result to the response body
-	w.Write(path_result)
-}
+	response := struct {
+		PathResult [][]string `json:"pathResult"`
+        Timer      int64 `json:"timer"`
+		Count	   int32 `json:"count"`
+		}{
+			PathResult: path_result,
+        	Timer:      timer.Milliseconds(),
+			Count: 		visit_count,
+    	}
+	
+    // Encode the response object as JSON
+    jsonResponse, err := json.Marshal(response)
+    if err != nil {
+		http.Error(w, "Failed to encode response as JSON", http.StatusInternalServerError)
+        return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(jsonResponse)
+};
 
 //func runWikiRace(start string, target string, searchType string) {
 //    bfsMethod := true

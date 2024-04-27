@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Graph from 'react-vis-network-graph';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -7,6 +8,8 @@ let first = 0
 function NodeGraph({ darkmode, showGraph, start, target, listSolution}) {
   const [graph, setGraph] = useState({ nodes: [], edges: [] });
   const [length, setLength] = useState(0);
+  const [time, setTime] = useState(0);
+  const [linkTotal, setLinkTotal] = useState(0)
 
   useEffect(() => {
     let searchTimeout;
@@ -25,19 +28,22 @@ function NodeGraph({ darkmode, showGraph, start, target, listSolution}) {
         });
     
         const data = await response.json();
-        console.log(data);
+
+        console.log(data.pathResult);
+        console.log(data.timer)
+        console.log(data.count)
         if (first > 1) {
-          generateGraph(data);
+          generateGraph(data.pathResult, data.timer, data.count);
+          try {
+            fetch('http://localhost:3001/CRASHTHISLMAO', {
+              method: 'POST',
+            });
+          } catch (error) {
+            console.error('Error:', error);
+          }
         }
         else {
           first += 1
-        }
-        try {
-          fetch('http://localhost:3001/CRASHTHISLMAO', {
-            method: 'POST',
-          });
-        } catch (error) {
-          console.error('Error:', error);
         }
       }, 500); // Adjust the debounce delay as needed (e.g., 500ms)
     };
@@ -59,7 +65,7 @@ function NodeGraph({ darkmode, showGraph, start, target, listSolution}) {
       return nodeLists;
     };
 
-    const generateGraph = (paths) => {
+    const generateGraph = (paths, Time, count) => {
       var graphData = {
         nodes: [],
         edges: []
@@ -96,6 +102,8 @@ function NodeGraph({ darkmode, showGraph, start, target, listSolution}) {
         }
       }
       setGraph(graphData);
+      setTime(Time);
+      setLinkTotal(count);
     };
 
     if (start && target && showGraph) {
@@ -159,7 +167,9 @@ function NodeGraph({ darkmode, showGraph, start, target, listSolution}) {
   return (
       <div className = "flex flex-col items-center gap-1 mt-40">
         <div className = "flex items-center justify-center border ">
-          Found in Depth: {length-1} 
+            Found in Depth: {length-1} <br/>
+            Time: {time} ms <br/>
+            Total link visited: {linkTotal} <br/>
         </div>
         <div style={{ width: '100vh', height: '75vh' }} className="items-center align-middle justify-center border  bg-slate-300 rounded-xl mb-10">
           <Graph
