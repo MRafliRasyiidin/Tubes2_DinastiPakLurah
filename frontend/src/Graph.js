@@ -8,8 +8,16 @@ function NodeGraph({ darkmode, start, target}) {
 
   useEffect(() => {
     const handleSearch = async () => {
-      const nodes = await fetchNodeList(start, target);
-      generateGraph(nodes);
+      const response = await fetch('/search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ startLink: start, targetLink: target, searchType: 'BFS' }), // Adjust searchType as needed
+      });
+      const data = await response.json();
+      console.log(data)
+      generateGraph(data);
     };
 
     const fetchNodeList = async (start, target, listSolution) => {

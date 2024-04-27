@@ -59,13 +59,15 @@ useEffect(() =>{
   } 
 }, [start, target]);
 
-  const handleSearch = () => {
+  const handleSearch = (event) => {
+      event.preventDefault()
       if (start.length !== 0 && target.length !== 0) {
         sendData(start, target, searchAlgorithm);
+        console.log(searchAlgorithm);
+        console.log(start);
         setShowGraph(true);
       }
   };
-  console.log(searchAlgorithm);
   return (
     <div>
       <div className="flex flex-row items-center justify-center gap-4 ">
@@ -88,7 +90,9 @@ useEffect(() =>{
         />
       </div>
       <div className="flex justify-center items-center mt-4">
-        <button id="submitButton" type="submit" onClick={handleSearch}  className="bg-gray-400 hover:bg-gray-800 text-white font-bold py-2 px-5 rounded-xl">Search</button>
+        <form onSubmit={handleSearch}>
+          <button id="submitButton" type="submit" className="bg-gray-400 hover:bg-gray-800 text-white font-bold py-2 px-5 rounded-xl">Search</button>
+        </form>
       </div>
       {showGraph && start && target && 
         <NodeGraph darkmode={darkmode} start={start} target={target} onRender={() => setShowGraph(!showGraph)} />
