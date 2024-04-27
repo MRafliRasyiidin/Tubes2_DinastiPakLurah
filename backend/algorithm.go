@@ -78,11 +78,11 @@ func caller(linkStart, linkTarget string, isBFS, searchAll bool, depth, visitCou
 	return paths
 }
 
-func runAlgorithm(start string, target string, bfs bool) ([][]string, time.Duration, int32) {
+func runAlgorithm(start string, target string, bfs bool, all bool) ([][]string, time.Duration, int32) {
 	var visitCount int32
 	var depth int32
 	var timer time.Duration
-	result := caller(start, target, bfs, false, &depth, &visitCount, &timer)
+	result := caller(start, target, bfs, all, &depth, &visitCount, &timer)
 	fmt.Println(result)
 	fmt.Println(timer)
 	return result, timer, visitCount

@@ -2,7 +2,9 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
+
 	//"time"
 
 	//"fmt"
@@ -18,6 +20,7 @@ type Data struct {
 	Start  string `json:"startLink"`
 	Target string `json:"TargetLink"`
 	Method string `json:"searchType"`
+	All	   string `json:"searchAll"`
 }
 
 func main() {
@@ -86,6 +89,7 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 	startWord := data.Start
 	targetWord := data.Target
 	searchMethod := data.Method
+	searchAll := data.All
 	startWord = strings.ReplaceAll(startWord, " ", "_")
 	targetWord = strings.ReplaceAll(targetWord, " ", "_")
 	// Do something with the form data
@@ -99,7 +103,13 @@ func searchHandler(w http.ResponseWriter, r *http.Request) {
 	if searchMethod == "IDS" {
 		bfsMethod = false
 	}
-	path_result, timer, visit_count := runAlgorithm(startWord, targetWord, bfsMethod)
+	searchAllBool := false
+	if searchAll == "Yes"  {
+		searchAllBool = true
+	}
+	fmt.Println(searchAll, searchAllBool)
+	fmt.Println(searchMethod, bfsMethod)
+	path_result, timer, visit_count := runAlgorithm(startWord, targetWord, bfsMethod, searchAllBool)
 	// Set the content type header to JSON
 
 	response := struct {

@@ -140,7 +140,7 @@ queueIteration:
 		controller := <-controlBFS
 
 		// fmt.Println("Periksa queue", queue.Len())
-		if controller.empty && controller.found || (atomic.LoadInt32(&found) >= 1 && time.Since(*timer) > 2*time.Second && !searchAll) || atomic.LoadInt32(depth) > 9 {
+		if controller.empty && controller.found || (atomic.LoadInt32(&found) >= 1 && time.Since(*timer) > 500*time.Millisecond && !searchAll) || atomic.LoadInt32(depth) > 9 {
 			// if controller.empty && controller.found {
 			if controller.empty && controller.found {
 				atomic.AddInt32(depth, -1)

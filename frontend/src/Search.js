@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import AutoCompleteInput from './components/AutoComplete.js';
 import NodeGraph from './Graph.js';
 
-async function sendData(start, target, searchAlgo) {
+async function sendData(start, target, searchAlgo, searchMulti) {
   var data = {
     startLink: start,
     targetLink: target,
-    searchType: searchAlgo
+    searchType: searchAlgo,
+    searchAll: searchMulti
   }
 
   fetch('http://localhost:3001/search', {
@@ -29,7 +30,7 @@ async function sendData(start, target, searchAlgo) {
   console.log("ini send")
 }
 
-function Search({ darkmode, searchAlgorithm }) {
+function Search({ darkmode, searchAlgorithm, searchAll }) {
   const [search, setSearch] = useState(true);
   const [start, setStart] = useState('');
   const [target, setTarget] = useState('');
@@ -54,8 +55,9 @@ function Search({ darkmode, searchAlgorithm }) {
       console.log(startTemp, targetTemp);
       if (startTemp && targetTemp) {
           setSearch(false);
-          sendData(startTemp, targetTemp, searchAlgorithm);
+          sendData(startTemp, targetTemp, searchAlgorithm, searchAll);
           console.log(searchAlgorithm);
+          console.log("ini all",searchAll);
         }
         setShowGraph(true);
       };
@@ -93,7 +95,7 @@ function Search({ darkmode, searchAlgorithm }) {
         <button id="submitButton" value="submit" onClick={handleSearch} className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-5 rounded-xl z-10">Search</button>
       </div>
       {showGraph && start && target && 
-        <NodeGraph darkmode={darkmode} showGraph={showGraph} start={start} target={target}/>
+        <NodeGraph darkmode={darkmode} showGraph={showGraph} start={start} target={target} searchAlgorithm={searchAlgorithm} searchAll={searchAll}/>
       }</div>
   );
 }

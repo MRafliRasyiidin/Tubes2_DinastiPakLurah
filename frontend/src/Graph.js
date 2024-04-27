@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 let first = 0
 
-function NodeGraph({ darkmode, showGraph, start, target, listSolution}) {
+function NodeGraph({ darkmode, showGraph, start, target, searchAlgorithm, searchAll }) {
   const [graph, setGraph] = useState({ nodes: [], edges: [] });
   const [length, setLength] = useState(0);
   const [time, setTime] = useState(0);
@@ -24,7 +24,7 @@ function NodeGraph({ darkmode, showGraph, start, target, listSolution}) {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ startLink: start, targetLink: target, searchType: 'BFS' }), 
+          body: JSON.stringify({ startLink: start, targetLink: target, searchType: searchAlgorithm, searchAll: searchAll }), 
         });
     
         const data = await response.json();
