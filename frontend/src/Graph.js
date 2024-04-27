@@ -2,44 +2,14 @@ import React, { useState, useEffect } from 'react';
 import Graph from 'react-vis-network-graph';
 import { v4 as uuidv4 } from 'uuid';
 
-let first = 0
-
-function NodeGraph({ darkmode, showGraph, start, target, listSolution}) {
+function NodeGraph({ darkmode, showGraph, start, target, time, listSolution}) {
   const [graph, setGraph] = useState({ nodes: [], edges: [] });
   const [length, setLength] = useState(0);
 
   useEffect(() => {
-    let searchTimeout;
     const handleSearch = async () => {
-      if (searchTimeout) {
-        clearTimeout(searchTimeout);
-      }
-    
-      searchTimeout = setTimeout(async () => {
-        const response = await fetch('http://localhost:3001/search', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ startLink: start, targetLink: target, searchType: 'BFS' }), 
-        });
-    
-        const data = await response.json();
-        console.log(data);
-        if (first > 1) {
-          generateGraph(data);
-        }
-        else {
-          first += 1
-        }
-        try {
-          fetch('http://localhost:3001/CRASHTHISLMAO', {
-            method: 'POST',
-          });
-        } catch (error) {
-          console.error('Error:', error);
-        }
-      }, 500); // Adjust the debounce delay as needed (e.g., 500ms)
+      const nodes = await fetchNodeList(showGraph, start, target);
+      generateGraph(nodes);
     };
 
     const fetchNodeList = async (showGraph, start, target, listSolution) => {
@@ -159,7 +129,9 @@ function NodeGraph({ darkmode, showGraph, start, target, listSolution}) {
   return (
       <div className = "flex flex-col items-center gap-1 mt-40">
         <div className = "flex items-center justify-center border ">
+
           Found in Depth: {length-1} 
+          Time: {time + "ms"}; 
         </div>
         <div style={{ width: '100vh', height: '75vh' }} className="items-center align-middle justify-center border  bg-slate-300 rounded-xl mb-10">
           <Graph
