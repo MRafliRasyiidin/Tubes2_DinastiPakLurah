@@ -7,17 +7,25 @@ function NodeGraph({ darkmode, showGraph, start, target, listSolution}) {
   const [length, setLength] = useState(0);
 
   useEffect(() => {
+    let searchTimeout;
     const handleSearch = async () => {
-      const response = await fetch('/search', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ startLink: start, targetLink: target, searchType: 'BFS' }), // Adjust searchType as needed
-      });
-      const data = await response.json();
-      console.log(data)
-      generateGraph(data);
+      if (searchTimeout) {
+        clearTimeout(searchTimeout);
+      }
+    
+      searchTimeout = setTimeout(async () => {
+        const response = await fetch('/search', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ startLink: start, targetLink: target, searchType: 'BFS' }), 
+        });
+    
+        const data = await response.json();
+        console.log(data);
+        generateGraph(data);
+      }, 500); // Adjust the debounce delay as needed (e.g., 500ms)
     };
 
     const fetchNodeList = async (showGraph, start, target, listSolution) => {
