@@ -35,9 +35,13 @@ function NodeGraph({ darkmode, showGraph, start, target, searchAlgorithm, search
         if (first > 1) {
           generateGraph(data.pathResult, data.timer, data.count);
           try {
-            fetch('http://localhost:3001/CRASHTHISLMAO', {
+            const response = await fetch('http://localhost:3001/CRASHTHISLMAO', {
               method: 'POST',
             });
+          
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
           } catch (error) {
             console.error('Error:', error);
           }
