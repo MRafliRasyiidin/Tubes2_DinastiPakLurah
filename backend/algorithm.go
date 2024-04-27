@@ -1,45 +1,31 @@
-// package main
-
-// import (
-// 	"fmt"
-// 	"html/template"
-// 	"net/http"
-// )
-
-// // func index(w http.ResponseWriter, r *http.Request) {
-// // fmt.Fprintln(w, "your mum")
-// // }
-
-// func main() {
-// 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-// 		fmt.Fprintln(w, "")
-
-// 		var t, err = template.ParseFiles(("template/main.html"))
-// 		if err != nil {
-// 			fmt.Println(err.Error())
-// 			return
-// 		}
-// 		t.Execute(w, map[string]string{"Text": "naw"})
-// 	})
-
-// 	// http.HandleFunc("/urmumgay", index)
-
-// 	fmt.Println("starting web server at http://localhost:8080/")
-// 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
-// 	http.ListenAndServe(":8080", nil)
-// }
-
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"reflect"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/thalesfsp/go-common-types/safeorderedmap"
 )
+
+func linkNotInside(linkEntry, linkTarget string, pathMap *safeorderedmap.SafeOrderedMap[[]string]) bool {
+	slicePath, _ := pathMap.Get(linkEntry)
+	for _, link := range slicePath {
+		if link == linkTarget {
+			return false
+		}
+	}
+	return true
+}
+
+func extractTitle(url string) string {
+	parts := strings.Split(url, "/")
+	title := parts[len(parts)-1]
+	title = strings.ReplaceAll(title, "_", " ")
+	return title
+}
 
 func dfsPathMaker(node, ender string, adjacencyList *safeorderedmap.SafeOrderedMap[[]string], path []string, paths *[][]string, depth int32) {
 	adjacent, _ := adjacencyList.Get(node)
@@ -47,9 +33,7 @@ func dfsPathMaker(node, ender string, adjacencyList *safeorderedmap.SafeOrderedM
 
 	path = append(path, node)
 	pathCopy := []string{}
-	for _, value := range path {
-		pathCopy = append(pathCopy, value)
-	}
+	pathCopy = append(pathCopy, path...)
 	isExist := false
 	for _, value := range *paths {
 		if reflect.DeepEqual(value, pathCopy) {
@@ -58,6 +42,10 @@ func dfsPathMaker(node, ender string, adjacencyList *safeorderedmap.SafeOrderedM
 		}
 	}
 	if finish && !isExist {
+		for i, j := 0, len(pathCopy)-1; i < j; i, j = i+1, j-1 {
+			fmt.Println(extractTitle(pathCopy[i]))
+			pathCopy[i], pathCopy[j] = extractTitle(pathCopy[j]), extractTitle(pathCopy[i])
+		}
 		*paths = append(*paths, pathCopy)
 	} else {
 		if len(path) < int(depth)+1 {
@@ -76,26 +64,30 @@ func converter(adjacencyList *safeorderedmap.SafeOrderedMap[[]string], start, en
 	return paths
 }
 
-func algorithm(startLink string, targetLink string) {
-	var wg sync.WaitGroup
-	var depth int32 = 0
+func caller(linkStart, linkTarget string, isBFS, searchAll bool, depth, visitCount *int32, timer *time.Duration) []byte {
 	start := time.Now()
 	path := safeorderedmap.New[[]string]()
-	linkStart := strings.ReplaceAll(startLink, " ", "_")
-	linkTarget := strings.ReplaceAll(targetLink, " ", "_")
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		crawlerBFS(linkStart, linkTarget, path, &depth, start)
-		// crawlerIDS(linkStart, linkTarget, path, &depth)
-	}()
-	wg.Wait()
-	fmt.Println("DEPTH IS", depth+1)
-	paths := converter(path, linkTarget, linkStart, depth)
-	for _, res := range paths {
-		if res[len(res)-1] == "https://en.wikipedia.org/wiki/"+linkStart {
-			fmt.Println(res)
-		}
+	if isBFS {
+		crawlerBFS(linkStart, linkTarget, path, depth, visitCount, searchAll, start)
+	} else {
+		crawlerIDS(linkStart, linkTarget, path, depth, visitCount, searchAll, start)
 	}
-	fmt.Println("Runtime:", time.Since(start))
+	paths := converter(path, linkTarget, linkStart, *depth)
+
+	*timer = time.Since(start)
+	jsonString, err := json.Marshal(paths)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return jsonString
+}
+
+func runAlgorithm(start string, target string, bfs bool) []byte {
+	var visitCount int32
+	var depth int32
+	var timer time.Duration
+	result := caller(start, target, bfs, false, &depth, &visitCount, &timer)
+	fmt.Println(string(result))
+	fmt.Println(timer)
+	return result
 }

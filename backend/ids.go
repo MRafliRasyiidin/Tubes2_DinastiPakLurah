@@ -13,16 +13,17 @@ import (
 )
 
 type pairChan struct {
-	found bool
+	found int
 	done  bool
 }
 
 var (
-	controlChan = make(chan pairChan)
+	controlIDS = make(chan pairChan)
 )
 
-func crawlerDLS(start string, target string, depth int, path *safeorderedmap.SafeOrderedMap[[]string]) {
+func crawlerDLS(start string, target string, depth int, visitCount *int32, linkFound *int32, path *safeorderedmap.SafeOrderedMap[[]string], visited *safeorderedmap.SafeOrderedMap[bool], timer *time.Time) {
 	var inserter pairChan
+	time.Sleep(500 * time.Millisecond)
 	c := colly.NewCollector(
 		colly.AllowedDomains("en.wikipedia.org"),
 		colly.MaxDepth(depth+1),
@@ -33,7 +34,7 @@ func crawlerDLS(start string, target string, depth int, path *safeorderedmap.Saf
 		// colly.CacheDir("./cache"),
 	)
 
-	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100, RandomDelay: 25 * time.Millisecond})
+	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100, Delay: 500 * time.Millisecond})
 
 	c.OnRequest(func(r *colly.Request) {
 		// fmt.Println("Visiting", r.URL)
@@ -45,6 +46,11 @@ func crawlerDLS(start string, target string, depth int, path *safeorderedmap.Saf
 
 	c.OnResponse(func(r *colly.Response) {
 		fmt.Println("Visited", r.Request.URL)
+		hasVisited, _ := visited.Get(r.Request.URL.String())
+		if !hasVisited {
+			visited.Add(r.Request.URL.String(), true)
+			atomic.StoreInt32(visitCount, atomic.LoadInt32(visitCount)+1)
+		}
 	})
 
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
@@ -54,11 +60,15 @@ func crawlerDLS(start string, target string, depth int, path *safeorderedmap.Saf
 		pathInserter, _ := path.Get(e.Request.AbsoluteURL(link))
 
 		if link == "/wiki/"+target {
-			fmt.Println("Found target link at depth", depth+1, ":", link)
-			path.Add(e.Request.AbsoluteURL(link), append(pathInserter, e.Request.URL.String()))
+			*timer = time.Now()
+			fmt.Println("Found target link at depth", depth+1, ":", link, time.Since(*timer))
+			if linkNotInside(e.Request.AbsoluteURL(link), e.Request.URL.String(), path) {
+				path.Add(e.Request.AbsoluteURL(link), append(pathInserter, e.Request.URL.String()))
+			}
+			atomic.AddInt32(linkFound, 1)
 			inserter.done = true
-			inserter.found = true
-			controlChan <- inserter
+			inserter.found = depth
+			controlIDS <- inserter
 			return
 		}
 		if strings.HasPrefix(link, "/wiki/") &&
@@ -75,7 +85,9 @@ func crawlerDLS(start string, target string, depth int, path *safeorderedmap.Saf
 			!strings.Contains(link, "_talk:") &&
 			e.Request.AbsoluteURL(link) != e.Request.URL.String() &&
 			link != "/wiki/Main_Page" {
-			path.Add(e.Request.AbsoluteURL(link), append(pathInserter, e.Request.URL.String()))
+			if linkNotInside(e.Request.AbsoluteURL(link), e.Request.URL.String(), path) {
+				path.Add(e.Request.AbsoluteURL(link), append(pathInserter, e.Request.URL.String()))
+			}
 			e.Request.Visit(link)
 		}
 	})
@@ -86,24 +98,29 @@ func crawlerDLS(start string, target string, depth int, path *safeorderedmap.Saf
 
 	c.Visit("https://en.wikipedia.org/wiki/" + start)
 	c.Wait()
-	inserter.found = false
+	inserter.found = -1
 	inserter.done = true
-	controlChan <- inserter
+	controlIDS <- inserter
 }
 
-func crawlerIDS(start, target string, path *safeorderedmap.SafeOrderedMap[[]string], depth *int32) {
+func crawlerIDS(start, target string, path *safeorderedmap.SafeOrderedMap[[]string], depth *int32, visitCount *int32, searchAll bool, timer time.Time) {
 	// os.RemoveAll("./cache")
+	var linkFound int32
+	callerTimer := timer
+	visited := safeorderedmap.New[bool]()
 	i := 0
 incrementLoop:
 	for {
 		fmt.Println("Searching at depth:", i)
-		go crawlerDLS(start, target, i, path)
-		controlFlow := <-controlChan
-		if controlFlow.found && controlFlow.done {
-			time.Sleep(5 * time.Second)
+		go crawlerDLS(start, target, i, visitCount, &linkFound, path, visited, &callerTimer)
+		controlFlow := <-controlIDS
+		if controlFlow.found != -1 && controlFlow.found < i && controlFlow.done || (atomic.LoadInt32(&linkFound) >= 1 && time.Since(callerTimer) > 500*time.Millisecond && !searchAll) || atomic.LoadInt32(depth) > 9 {
+			if controlFlow.found != -1 && controlFlow.found < i && controlFlow.done {
+				atomic.AddInt32(depth, -1)
+			}
 			break incrementLoop
 		}
-		if controlFlow.done && !controlFlow.found {
+		if controlFlow.done && controlFlow.found == -1 {
 			i++
 			atomic.StoreInt32(depth, int32(i))
 		}

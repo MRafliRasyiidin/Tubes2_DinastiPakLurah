@@ -32,6 +32,13 @@ function NodeGraph({ darkmode, showGraph, start, target, listSolution}) {
         else {
           first += 1
         }
+        try {
+          fetch('http://localhost:3001/CRASHTHISLMAO', {
+            method: 'POST',
+          });
+        } catch (error) {
+          console.error('Error:', error);
+        }
       }, 500); // Adjust the debounce delay as needed (e.g., 500ms)
     };
 
