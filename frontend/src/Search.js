@@ -9,7 +9,7 @@ async function sendData(start, target, searchAlgo) {
     searchType: searchAlgo
   }
 
-  fetch('/search', {
+  fetch('http://localhost:3001/search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

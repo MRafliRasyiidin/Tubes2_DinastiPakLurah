@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Graph from 'react-vis-network-graph';
 import { v4 as uuidv4 } from 'uuid';
 
+let first = 0
+
 function NodeGraph({ darkmode, showGraph, start, target, listSolution}) {
   const [graph, setGraph] = useState({ nodes: [], edges: [] });
   const [length, setLength] = useState(0);
@@ -14,7 +16,7 @@ function NodeGraph({ darkmode, showGraph, start, target, listSolution}) {
       }
     
       searchTimeout = setTimeout(async () => {
-        const response = await fetch('/search', {
+        const response = await fetch('http://localhost:3001/search', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -24,7 +26,12 @@ function NodeGraph({ darkmode, showGraph, start, target, listSolution}) {
     
         const data = await response.json();
         console.log(data);
-        generateGraph(data);
+        if (first > 1) {
+          generateGraph(data);
+        }
+        else {
+          first += 1
+        }
       }, 500); // Adjust the debounce delay as needed (e.g., 500ms)
     };
 

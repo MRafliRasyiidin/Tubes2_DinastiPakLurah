@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 	"strings"
+    //"github.com/stretchr/testify"
+	//"github.com/gofiber/fiber/v3/middleware/cors"
 )
 
 type Data struct {
@@ -17,18 +19,44 @@ type Data struct {
 
 
 func main() {
-    //http.HandleFunc("/", index)
-    http.HandleFunc("/search", searchHandler)
-    log.Println("Server is running on http://localhost:3000")
-    http.ListenAndServe(":3000", nil)
+    mux := http.NewServeMux()
+    mux.HandleFunc("/search", searchHandler)
+
+    //handler := cors.Default().Handler(mux)
+
+    log.Println("Server is running on http://localhost:3001/search")
+
+    err := http.ListenAndServe(":3001", corsHandler(mux)) // Use the CORS handler here
+    if err != nil {
+        log.Fatal("ListenAndServe: ", err)
+    }
 }
 
-//func index(w http.ResponseWriter, r *http.Request) {
-//    http.ServeFile(w, r, "src/index.html")
-//}
+func corsHandler(h http.Handler) http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        // Set CORS headers
+        w.Header().Set("Access-Control-Allow-Origin", "*")
+        w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+        // If it's a preflight request, respond with 200 OK
+        if r.Method == "OPTIONS" {
+            w.WriteHeader(http.StatusOK)
+            return
+        }
+
+        // Call the original handler
+        h.ServeHTTP(w, r)
+    })
+}
 
 func searchHandler(w http.ResponseWriter, r *http.Request) {
     // Parse form data
+    //enableCors(&w)
+    //w.Header().Set("Access-Control-Allow-Origin", "*")
+    //w.Header().Set("Access-Control-Allow-Methods", "POST")
+    //w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
     err := r.ParseForm()
     if err != nil {
         http.Error(w, "Error parsing form data", http.StatusInternalServerError)

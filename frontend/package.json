@@ -22,12 +22,13 @@
     "react-switch": "^7.0.0",
     "react-tsparticles": "^2.12.2",
     "react-vis-network-graph": "^3.0.1",
+    "wait-on": "^7.2.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "dev": "wait-on tcp:3000 && go run main.go",
-    "start-node": "npm start",
+    "start": "concurrently \"npm run start-node\" \"npm run server\"",
+    "server": "go run .",
+    "start-node": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

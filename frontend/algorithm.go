@@ -43,6 +43,7 @@ func dfsPathMaker(node, ender string, adjacencyList *safeorderedmap.SafeOrderedM
 	}
 	if finish && !isExist {
 		for i, j := 0, len(pathCopy)-1; i < j; i, j = i+1, j-1 {
+			fmt.Println(extractTitle(pathCopy[i]))
 			pathCopy[i], pathCopy[j] = extractTitle(pathCopy[j]), extractTitle(pathCopy[i])
 		}
 		*paths = append(*paths, pathCopy)
